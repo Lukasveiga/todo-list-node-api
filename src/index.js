@@ -1,15 +1,12 @@
 const express = require("express");
+const { connection } = require("./database/connect");
+const middleware = require("./middlewares");
 require("dotenv").config();
 
-require("./database/connect");
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
-app.use((req, res, next) => {
-  console.log(`${req.method}:${req.url}`);
-  next();
-});
+app.use(middleware.requestLog);
 
 app.get("/test", (req, res) => {
   res.send("Hello World!");
