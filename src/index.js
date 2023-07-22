@@ -1,12 +1,9 @@
 const express = require("express");
 const middleware = require("./middlewares");
-const connection = require("./database/connect");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-
-connection;
 
 app.use(express.json());
 

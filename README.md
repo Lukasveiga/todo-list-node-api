@@ -24,4 +24,4 @@
 }
 ```
 
-- The tasks will be ordered by priority, ranging from 0 to 10 where 0 is the lowest priority and 10 is the highest priority.
+- The tasks will be ordered by priority, ranging from 0 to 5 where 0 is the lowest priority and 5 is the highest priority.
