@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  database:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: "dbApiToDoList"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - todo-db:/var/lib/mysql
+
+volumes:
+  todo-db:
