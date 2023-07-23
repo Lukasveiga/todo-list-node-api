@@ -9,14 +9,6 @@ const connection = mysql.createConnection({
   password: process.env.MYSQL_PASSWORD || "root",
 });
 
-connection.query(
-  `CREATE DATABASE IF NOT EXISTS ${process.env.MYSQL_DATABASE}`,
-  (err, results) => {
-    if (err) throw err;
-    console.log(results);
-  }
-);
-
 connection.connect((error) => {
   if (error) throw error;
   console.log(`Connecting to database: ${process.env.MYSQL_DATABASE}`);

@@ -5,14 +5,14 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: "dbApiToDoList"
-      MYSQL_USER: "user"
-      MYSQL_PASSWORD: "password"
-      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3306:${MYSQL_PORT}"
     expose:
-      - "3306"
+      - "${MYSQL_PORT}"
     volumes:
       - todo-db:/var/lib/mysql
 
