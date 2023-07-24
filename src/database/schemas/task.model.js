@@ -17,7 +17,7 @@ const Taks = sequelize.define("tb_task", {
   },
   createdAt: {
     type: DataTypes.DATE,
-    allowNull: false,
+    defaultValue: Date.now(),
   },
   finishedAt: {
     type: DataTypes.DATE,
