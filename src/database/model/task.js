@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./user");
-const database = require("../database/connect");
+const database = require("../connect");
 
 const Task = database.define("tb_task", {
   id: {
