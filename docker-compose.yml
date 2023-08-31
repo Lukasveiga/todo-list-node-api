@@ -2,19 +2,16 @@ version: "3.8"
 
 services:
   database:
-    image: mysql:latest
+    image: postgres
     restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "3306:${MYSQL_PORT}"
-    expose:
-      - "${MYSQL_PORT}"
+      - 5432:${DB_PORT}
     volumes:
-      - todo-db:/var/lib/mysql
+      - ./db-data/todo-db:/var/lib/postgresql/data
 
 volumes:
   todo-db:
