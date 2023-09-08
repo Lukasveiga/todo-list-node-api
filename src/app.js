@@ -1,7 +1,6 @@
 const express = require("express");
 const { requestLog } = require("./middlewares/index");
 const router = require("./routes/index");
-require("dotenv").config();
 
 const app = express();
 
