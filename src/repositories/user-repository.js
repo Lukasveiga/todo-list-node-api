@@ -1,5 +1,5 @@
 const User = require("../database/model/user");
-const { InternalError, BadRequestError } = require("../utils/exceptions");
+const { BadRequestError } = require("../utils/exceptions");
 
 class UserRepository {
   async create(body) {
@@ -17,7 +17,6 @@ class UserRepository {
       if ((error.name = "SequelizeUniqueConstraintError")) {
         throw new BadRequestError("Email already exists.");
       }
-      throw new InternalError();
     }
   }
 }

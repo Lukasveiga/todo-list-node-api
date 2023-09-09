@@ -23,16 +23,9 @@ class UnauthorizedError extends CustomError {
   }
 }
 
-class InternalError extends CustomError {
-  constructor() {
-    super("Internal server error", 500);
-  }
-}
-
 module.exports = {
   CustomError,
   BadRequestError,
   NotFoundError,
   UnauthorizedError,
-  InternalError,
 };
