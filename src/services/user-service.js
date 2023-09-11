@@ -6,11 +6,11 @@ class UserService {
   async create(body) {
     const { username, password, email } = body;
     try {
-      const newUser = await this.userRepository.create(
+      const newUser = await this.userRepository.create({
         username,
         password,
-        email
-      );
+        email,
+      });
 
       delete newUser.password;
 
