@@ -1,5 +1,3 @@
-const { Model } = require("sequelize");
-
 class UserService {
   constructor(userRepository) {
     this.userRepository = userRepository;
