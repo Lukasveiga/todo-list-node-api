@@ -5,13 +5,27 @@ class UserRepositorySpy {
     const { username, email, password } = body;
     return { username, email, password };
   }
+  async findByEmail(email) {
+    return false;
+  }
 }
 
-const userRepositorySpy = new UserRepositorySpy();
+class EncrypterSpy {
+  async hash(password) {
+    return this.hashedPassword;
+  }
+}
+
+const makeSut = () => {
+  const userRepositorySpy = new UserRepositorySpy();
+  const encrypterSpy = new EncrypterSpy();
+  const sut = new UserService(userRepositorySpy, encrypterSpy);
+  return { sut, userRepositorySpy, encrypterSpy };
+};
 
 describe("User Service", () => {
   test("Should return user dto body when create a new user", async () => {
-    const sut = new UserService(userRepositorySpy);
+    const { sut } = makeSut();
     const userTest = {
       username: "any_username",
       email: "any_email@email.com",
