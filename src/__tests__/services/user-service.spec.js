@@ -24,9 +24,22 @@ class EncrypterSpy {
   }
 }
 
+const makeEncrypterSpy = () => {
+  class EncrypterSpy {
+    async hash(password) {
+      return this.hashedPassword;
+    }
+  }
+
+  const encrypterSpy = new EncrypterSpy();
+  encrypterSpy.hashedPassword = "";
+
+  return encrypterSpy;
+};
+
 const makeSut = () => {
   const userRepositorySpy = makeUserRepositorySpy();
-  const encrypterSpy = new EncrypterSpy();
+  const encrypterSpy = makeEncrypterSpy();
   const sut = new UserService(userRepositorySpy, encrypterSpy);
   return { sut, userRepositorySpy, encrypterSpy };
 };
@@ -55,5 +68,26 @@ describe("User Service", () => {
     };
     const promise = sut.create(userTest);
     expect(promise).rejects.toThrow(new BadRequestError("User already exists."));
+  });
+
+  test("Should throw if invalid dependencies is provided", async () => {
+    const invalid = {};
+    const userRepositorySpy = makeUserRepositorySpy();
+    const encrypterSpy = makeEncrypterSpy();
+    const userTest = {
+      username: "any_username",
+      email: "any_email@email.com",
+      password: "any_password",
+    };
+
+    const suts = [].concat(
+      new UserService(invalid, encrypterSpy),
+      new UserService(userRepositorySpy, invalid)
+    );
+
+    for (const sut of suts) {
+      const promise = sut.create(userTest);
+      expect(promise).rejects.toThrow();
+    }
   });
 });
