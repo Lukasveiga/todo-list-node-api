@@ -18,12 +18,6 @@ const makeUserRepositorySpy = () => {
   return userRepositorySpy;
 };
 
-class EncrypterSpy {
-  async hash(password) {
-    return this.hashedPassword;
-  }
-}
-
 const makeEncrypterSpy = () => {
   class EncrypterSpy {
     async hash(password) {
@@ -62,12 +56,20 @@ describe("User Service", () => {
   test("Should throw if email provided is already registered in db", async () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.existingEmail = true;
-    console.log(await userRepositorySpy.findByEmail("a"));
+
     const userTest = {
       email: "invalid_email@email.com",
     };
     const promise = sut.create(userTest);
     expect(promise).rejects.toThrow(new BadRequestError("User already exists."));
+  });
+
+  test("Should return hashed password when call hash method from Encrypter", async () => {
+    const { encrypterSpy } = makeSut();
+    encrypterSpy.hashedPassword = "hashed_password";
+
+    const hashedPassword = await encrypterSpy.hash("any_password");
+    expect(hashedPassword).toEqual(encrypterSpy.hashedPassword);
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
