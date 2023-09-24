@@ -8,27 +8,24 @@ class UserService {
 
   async create(body) {
     const { username, password, email } = body;
-    try {
-      const existingUser = await this.userRepository.findByEmail(email);
 
-      if (existingUser) {
-        throw new BadRequestError("User already exists.");
-      }
+    const existingUser = await this.userRepository.findByEmail(email);
 
-      const encryptPassword = await this.encrypter.hash(password);
-
-      const newUser = await this.userRepository.create({
-        username,
-        password: encryptPassword,
-        email,
-      });
-
-      delete newUser.password;
-
-      return newUser;
-    } catch (error) {
-      throw new Error(error.message);
+    if (existingUser) {
+      throw new BadRequestError("User already exists.");
     }
+
+    const encryptPassword = await this.encrypter.hash(password);
+
+    const newUser = await this.userRepository.create({
+      username,
+      password: encryptPassword,
+      email,
+    });
+
+    delete newUser.password;
+
+    return newUser;
   }
 }
 
