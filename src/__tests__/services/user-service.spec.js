@@ -1,5 +1,5 @@
 const UserService = require("../../services/user-service");
-const { BadRequestError } = require("../../utils/exceptions");
+const { BadRequestError, NotFoundError } = require("../../utils/exceptions");
 
 const makeUserRepositorySpy = () => {
   class UserRepositorySpy {
@@ -10,9 +10,14 @@ const makeUserRepositorySpy = () => {
     async findByEmail(email) {
       return this.existingEmail;
     }
+
+    async findById(id) {
+      return this.userDTO;
+    }
   }
 
   const userRepositorySpy = new UserRepositorySpy();
+  userRepositorySpy.userDTO = { username: "any_username", email: "any_email@email.com" };
   userRepositorySpy.existingEmail = false;
 
   return userRepositorySpy;
@@ -70,6 +75,21 @@ describe("User Service", () => {
 
     const hashedPassword = await encrypterSpy.hash("any_password");
     expect(hashedPassword).toEqual(encrypterSpy.hashedPassword);
+  });
+
+  test("Should return user dto when user is found by id", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+
+    const userDTO = await sut.findById("valid_id");
+    expect(userDTO).toEqual(userRepositorySpy.userDTO);
+  });
+
+  test("Should throw if user is not found by id", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userDTO = null;
+
+    const promise = sut.findById("invalid_id");
+    expect(promise).rejects.toThrow(new NotFoundError("User not found."));
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
