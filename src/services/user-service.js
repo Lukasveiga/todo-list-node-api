@@ -1,4 +1,4 @@
-const { BadRequestError } = require("../utils/exceptions");
+const { BadRequestError, NotFoundError } = require("../utils/exceptions");
 
 class UserService {
   constructor(userRepository, encrypter) {
@@ -26,6 +26,16 @@ class UserService {
     delete newUser.password;
 
     return newUser;
+  }
+
+  async findById(id) {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    return user;
   }
 }
 
