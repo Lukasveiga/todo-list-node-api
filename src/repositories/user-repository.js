@@ -45,6 +45,10 @@ class UserRepository {
 
     return updatedUser.get({ plain: true });
   }
+
+  async delete(id) {
+    await User.destroy({ where: { id } });
+  }
 }
 
 module.exports = UserRepository;
