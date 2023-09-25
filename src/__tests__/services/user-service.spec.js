@@ -20,22 +20,16 @@ const makeUserRepositorySpy = () => {
     }
   }
 
+  const userTest = {
+    username: "any_username",
+    email: "any_email@email.com",
+    password: "any_password",
+  };
+
   const userRepositorySpy = new UserRepositorySpy();
-  userRepositorySpy.userByEmail = {
-    username: "any_username",
-    email: "any_email@email.com",
-    password: "any_password",
-  };
-  userRepositorySpy.userById = {
-    username: "any_username",
-    email: "any_email@email.com",
-    password: "any_password",
-  };
-  userRepositorySpy.userUpdated = {
-    username: "any_username",
-    email: "any_email@email.com",
-    password: "any_password",
-  };
+  userRepositorySpy.userByEmail = userTest;
+  userRepositorySpy.userById = userTest;
+  userRepositorySpy.userUpdated = userTest;
 
   return userRepositorySpy;
 };
@@ -142,7 +136,7 @@ describe("User Service", () => {
   test("Should throw if if email provided is already registered in db when update user", async () => {
     const { sut } = makeSut();
 
-    const promise = sut.update({ email: "any_email2@email.com" }, "any_id");
+    const promise = sut.update({ email: "any_email@2email.com" }, "any_id");
     expect(promise).rejects.toThrow(new BadRequestError("Email already registered."));
   });
 
@@ -150,7 +144,7 @@ describe("User Service", () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.userByEmail = null;
 
-    const updatedUser = await sut.update({ email: "any_email2@email.com" }, "any_id");
+    const updatedUser = await sut.update({}, "any_id");
     expect(updatedUser).toEqual({
       username: userRepositorySpy.userUpdated.username,
       email: userRepositorySpy.userUpdated.email,
