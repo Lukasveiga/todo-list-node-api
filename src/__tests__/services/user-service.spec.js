@@ -114,6 +114,14 @@ describe("User Service", () => {
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
   });
 
+  test("Should throw if user is not found when update user", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userById = null;
+
+    const promise = sut.update({}, "any_id");
+    expect(promise).rejects.toThrow(new NotFoundError("User not found."));
+  });
+
   test("Should throw if invalid dependencies is provided", async () => {
     const invalid = {};
     const userRepositorySpy = makeUserRepositorySpy();
