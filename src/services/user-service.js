@@ -47,6 +47,43 @@ class UserService {
 
     return user;
   }
+
+  async update(body, id) {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    const { username, email, password } = body;
+
+    const updateParams = {};
+
+    if (username) {
+      updateParams.username = username;
+    }
+
+    if (email) {
+      if (email !== user.email) {
+        const existingEmail = await this.userRepository.findByEmail(email);
+
+        if (existingEmail) {
+          throw new BadRequestError("Email already registered.");
+        }
+      }
+      updateParams.email = email;
+    }
+
+    if (password) {
+      updateParams.password = password;
+    }
+
+    const updatedUser = await this.userRepository.update(updateParams);
+
+    delete updatedUser.password;
+
+    return updatedUser;
+  }
 }
 
 module.exports = UserService;
