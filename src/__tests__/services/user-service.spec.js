@@ -105,6 +105,14 @@ describe("User Service", () => {
     });
   });
 
+  test("Should throw if user is not found by email", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.user = null;
+
+    const promise = sut.findByEmail("invalid_email@email.com");
+    expect(promise).rejects.toThrow(new NotFoundError("User not found."));
+  });
+
   test("Should throw if invalid dependencies is provided", async () => {
     const invalid = {};
     const userRepositorySpy = makeUserRepositorySpy();
