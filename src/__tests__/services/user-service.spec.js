@@ -8,16 +8,17 @@ const makeUserRepositorySpy = () => {
       return { username, email, password };
     }
     async findByEmail(email) {
-      return this.user;
+      return this.userByEmail;
     }
 
     async findById(id) {
-      return this.user;
+      return this.userById;
     }
   }
 
   const userRepositorySpy = new UserRepositorySpy();
-  userRepositorySpy.user = { username: "any_username", email: "any_email@email.com" };
+  userRepositorySpy.userByEmail = { username: "any_username", email: "any_email@email.com" };
+  userRepositorySpy.userById = { username: "any_username", email: "any_email@email.com" };
 
   return userRepositorySpy;
 };
@@ -45,7 +46,7 @@ const makeSut = () => {
 describe("User Service", () => {
   test("Should return user dto body when create a new user", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.user = null;
+    userRepositorySpy.userByEmail = null;
     const userTest = {
       username: "any_username",
       email: "any_email@email.com",
@@ -60,7 +61,7 @@ describe("User Service", () => {
 
   test("Should throw if email provided is already registered in db", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.existingEmail = true;
+    userRepositorySpy.userByEmail = true;
 
     const userTest = {
       email: "invalid_email@email.com",
@@ -82,14 +83,14 @@ describe("User Service", () => {
 
     const userDTO = await sut.findById("valid_id");
     expect(userDTO).toEqual({
-      username: userRepositorySpy.user.username,
-      email: userRepositorySpy.user.email,
+      username: userRepositorySpy.userById.username,
+      email: userRepositorySpy.userById.email,
     });
   });
 
   test("Should throw if user is not found by id", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.user = null;
+    userRepositorySpy.userById = null;
 
     const promise = sut.findById("invalid_id");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
@@ -100,14 +101,14 @@ describe("User Service", () => {
 
     const userDTO = await sut.findByEmail("valid_email@email.com");
     expect(userDTO).toEqual({
-      username: userRepositorySpy.user.username,
-      email: userRepositorySpy.user.email,
+      username: userRepositorySpy.userByEmail.username,
+      email: userRepositorySpy.userByEmail.email,
     });
   });
 
   test("Should throw if user is not found by email", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.user = null;
+    userRepositorySpy.userByEmail = null;
 
     const promise = sut.findByEmail("invalid_email@email.com");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
