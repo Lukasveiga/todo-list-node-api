@@ -23,9 +23,9 @@ class UserService {
       email,
     });
 
-    delete newUser.password;
+    const { password: _, ...newUserDTO } = newUser;
 
-    return newUser;
+    return newUserDTO;
   }
 
   async findById(id) {
@@ -35,7 +35,9 @@ class UserService {
       throw new NotFoundError("User not found.");
     }
 
-    return user;
+    const { password: _, ...userDTO } = user;
+
+    return userDTO;
   }
 
   async findByEmail(email) {
@@ -45,7 +47,9 @@ class UserService {
       throw new NotFoundError("User not found.");
     }
 
-    return user;
+    const { password: _, ...userDTO } = user;
+
+    return userDTO;
   }
 
   async update(body, id) {
@@ -75,14 +79,15 @@ class UserService {
     }
 
     if (password) {
-      updateParams.password = password;
+      const encryptedPassword = await this.encrypter.hash(password);
+      updateParams.password = encryptedPassword;
     }
 
-    const updatedUser = await this.userRepository.update(updateParams);
+    const updatedUser = await this.userRepository.update(updateParams, id);
 
-    delete updatedUser.password;
+    const { password: _, ...updatedUserDTO } = updatedUser;
 
-    return updatedUser;
+    return updatedUserDTO;
   }
 }
 
