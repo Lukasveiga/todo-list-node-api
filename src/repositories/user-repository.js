@@ -19,6 +19,16 @@ class UserRepository {
       }
     }
   }
+
+  async findById(id) {
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return null;
+    }
+
+    return user.get({ plain: true });
+  }
 }
 
 module.exports = UserRepository;
