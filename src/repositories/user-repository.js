@@ -32,6 +32,19 @@ class UserRepository {
 
     return user.get({ plain: true });
   }
+
+  async update(body, id) {
+    const [updatedRows, [updatedUser]] = await User.update(body, {
+      where: { id },
+      returning: true,
+    });
+
+    if (updatedRows < 1) {
+      return null;
+    }
+
+    return updatedUser.get({ plain: true });
+  }
 }
 
 module.exports = UserRepository;
