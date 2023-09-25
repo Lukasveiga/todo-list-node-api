@@ -89,6 +89,16 @@ class UserService {
 
     return updatedUserDTO;
   }
+
+  async delete(id) {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    await this.userRepository.delete(id);
+  }
 }
 
 module.exports = UserService;
