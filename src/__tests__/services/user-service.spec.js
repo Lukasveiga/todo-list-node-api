@@ -8,16 +8,16 @@ const makeUserRepositorySpy = () => {
       return { username, email, password };
     }
     async findByEmail(email) {
-      return this.userDTO;
+      return this.user;
     }
 
     async findById(id) {
-      return this.userDTO;
+      return this.user;
     }
   }
 
   const userRepositorySpy = new UserRepositorySpy();
-  userRepositorySpy.userDTO = { username: "any_username", email: "any_email@email.com" };
+  userRepositorySpy.user = { username: "any_username", email: "any_email@email.com" };
 
   return userRepositorySpy;
 };
@@ -45,7 +45,7 @@ const makeSut = () => {
 describe("User Service", () => {
   test("Should return user dto body when create a new user", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.userDTO = null;
+    userRepositorySpy.user = null;
     const userTest = {
       username: "any_username",
       email: "any_email@email.com",
@@ -81,12 +81,15 @@ describe("User Service", () => {
     const { sut, userRepositorySpy } = makeSut();
 
     const userDTO = await sut.findById("valid_id");
-    expect(userDTO).toEqual(userRepositorySpy.userDTO);
+    expect(userDTO).toEqual({
+      username: userRepositorySpy.user.username,
+      email: userRepositorySpy.user.email,
+    });
   });
 
   test("Should throw if user is not found by id", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.userDTO = null;
+    userRepositorySpy.user = null;
 
     const promise = sut.findById("invalid_id");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
@@ -96,7 +99,10 @@ describe("User Service", () => {
     const { sut, userRepositorySpy } = makeSut();
 
     const userDTO = await sut.findByEmail("valid_email@email.com");
-    expect(userDTO).toEqual(userRepositorySpy.userDTO);
+    expect(userDTO).toEqual({
+      username: userRepositorySpy.user.username,
+      email: userRepositorySpy.user.email,
+    });
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
