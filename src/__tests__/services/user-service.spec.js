@@ -155,7 +155,7 @@ describe("User Service", () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.userById = null;
 
-    const promise = sut.update({}, "any_id");
+    const promise = sut.delete("any_id");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
   });
 
