@@ -85,6 +85,10 @@ class UserService {
 
     const updatedUser = await this.userRepository.update(updateParams, id);
 
+    if (!updatedUser) {
+      throw new BadRequestError("Was not possible to update user.");
+    }
+
     const { password: _, ...updatedUserDTO } = updatedUser;
 
     return updatedUserDTO;
