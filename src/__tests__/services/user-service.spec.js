@@ -14,11 +14,28 @@ const makeUserRepositorySpy = () => {
     async findById(id) {
       return this.userById;
     }
+
+    async update(body, id) {
+      return this.userUpdated;
+    }
   }
 
   const userRepositorySpy = new UserRepositorySpy();
-  userRepositorySpy.userByEmail = { username: "any_username", email: "any_email@email.com" };
-  userRepositorySpy.userById = { username: "any_username", email: "any_email@email.com" };
+  userRepositorySpy.userByEmail = {
+    username: "any_username",
+    email: "any_email@email.com",
+    password: "any_password",
+  };
+  userRepositorySpy.userById = {
+    username: "any_username",
+    email: "any_email@email.com",
+    password: "any_password",
+  };
+  userRepositorySpy.userUpdated = {
+    username: "any_username",
+    email: "any_email@email.com",
+    password: "any_password",
+  };
 
   return userRepositorySpy;
 };
@@ -127,6 +144,17 @@ describe("User Service", () => {
 
     const promise = sut.update({ email: "any_email2@email.com" }, "any_id");
     expect(promise).rejects.toThrow(new BadRequestError("Email already registered."));
+  });
+
+  test("Should return updated user dto when update user", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userByEmail = null;
+
+    const updatedUser = await sut.update({ email: "any_email2@email.com" }, "any_id");
+    expect(updatedUser).toEqual({
+      username: userRepositorySpy.userUpdated.username,
+      email: userRepositorySpy.userUpdated.email,
+    });
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
