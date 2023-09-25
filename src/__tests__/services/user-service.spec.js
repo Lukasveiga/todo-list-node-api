@@ -18,6 +18,8 @@ const makeUserRepositorySpy = () => {
     async update(body, id) {
       return this.userUpdated;
     }
+
+    async delete(id) {}
   }
 
   const userTest = {
@@ -157,6 +159,13 @@ describe("User Service", () => {
 
     const promise = sut.delete("any_id");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
+  });
+
+  test("Should not throw when delete user with valid params", async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.delete("any_id");
+    expect(promise).resolves.not.toThrow();
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
