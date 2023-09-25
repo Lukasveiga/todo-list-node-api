@@ -5,19 +5,13 @@ class UserRepository {
   async create(body) {
     const { username, email, password } = body;
 
-    try {
-      const newUser = await User.create({
-        username,
-        email,
-        password,
-      });
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+    });
 
-      return newUser.get({ plain: true });
-    } catch (error) {
-      if ((error.name = "SequelizeUniqueConstraintError")) {
-        throw new BadRequestError("Email already exists.");
-      }
-    }
+    return newUser.get({ plain: true });
   }
 
   async findById(id) {
