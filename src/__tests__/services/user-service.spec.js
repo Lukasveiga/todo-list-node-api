@@ -135,7 +135,7 @@ describe("User Service", () => {
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
   });
 
-  test("Should throw if if email provided is already registered in db when update user", async () => {
+  test("Should throw if email provided is already registered in db when update user", async () => {
     const { sut } = makeSut();
 
     const promise = sut.update({ email: "any_email@2email.com" }, "any_id");
@@ -151,6 +151,14 @@ describe("User Service", () => {
       username: userRepositorySpy.userUpdated.username,
       email: userRepositorySpy.userUpdated.email,
     });
+  });
+
+  test("Should throw if user was not updated", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userUpdated = null;
+
+    const promise = sut.update({}, "any_id");
+    expect(promise).rejects.toThrow(new BadRequestError("Was not possible to update user."));
   });
 
   test("Should throw if user is not found when delete user", async () => {
