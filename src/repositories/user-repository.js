@@ -1,5 +1,4 @@
 const User = require("../database/model/user");
-const { BadRequestError } = require("../utils/exceptions");
 
 class UserRepository {
   async create(body) {
