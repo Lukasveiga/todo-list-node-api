@@ -37,6 +37,16 @@ class UserService {
 
     return user;
   }
+
+  async findByEmail(email) {
+    const user = await this.userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    return user;
+  }
 }
 
 module.exports = UserService;
