@@ -8,7 +8,7 @@ const makeUserRepositorySpy = () => {
       return { username, email, password };
     }
     async findByEmail(email) {
-      return this.existingEmail;
+      return this.userDTO;
     }
 
     async findById(id) {
@@ -18,7 +18,6 @@ const makeUserRepositorySpy = () => {
 
   const userRepositorySpy = new UserRepositorySpy();
   userRepositorySpy.userDTO = { username: "any_username", email: "any_email@email.com" };
-  userRepositorySpy.existingEmail = false;
 
   return userRepositorySpy;
 };
@@ -45,7 +44,8 @@ const makeSut = () => {
 
 describe("User Service", () => {
   test("Should return user dto body when create a new user", async () => {
-    const { sut } = makeSut();
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userDTO = null;
     const userTest = {
       username: "any_username",
       email: "any_email@email.com",
@@ -90,6 +90,13 @@ describe("User Service", () => {
 
     const promise = sut.findById("invalid_id");
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
+  });
+
+  test("Should return user dto when user is found by email", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+
+    const userDTO = await sut.findByEmail("valid_email@email.com");
+    expect(userDTO).toEqual(userRepositorySpy.userDTO);
   });
 
   test("Should throw if invalid dependencies is provided", async () => {
