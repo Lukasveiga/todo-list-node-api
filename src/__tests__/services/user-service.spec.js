@@ -122,6 +122,13 @@ describe("User Service", () => {
     expect(promise).rejects.toThrow(new NotFoundError("User not found."));
   });
 
+  test("Should throw if if email provided is already registered in db when update user", async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.update({ email: "any_email2@email.com" }, "any_id");
+    expect(promise).rejects.toThrow(new BadRequestError("Email already registered."));
+  });
+
   test("Should throw if invalid dependencies is provided", async () => {
     const invalid = {};
     const userRepositorySpy = makeUserRepositorySpy();
