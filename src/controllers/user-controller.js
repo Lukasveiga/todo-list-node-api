@@ -1,3 +1,5 @@
+const { Model } = require("sequelize");
+
 class UserController {
   constructor(userService) {
     this.userService = userService;
@@ -22,4 +24,14 @@ class UserController {
     const updatedUser = await this.userService.update({ username, password, email }, id);
     return res.status(200).json(updatedUser);
   }
+
+  async delete(req, res) {
+    const { id } = req.user;
+
+    await this.userService.delete(id);
+
+    return res.status(200).send();
+  }
 }
+
+module.exports = UserController;
