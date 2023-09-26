@@ -14,4 +14,12 @@ class UserController {
     const userDetails = req.user;
     return res.status(200).json(userDetails);
   }
+
+  async update(req, res) {
+    const { username, password, email } = req.body;
+    const { id } = req.user;
+
+    const updatedUser = await this.userService.update({ username, password, email }, id);
+    return res.status(200).json(updatedUser);
+  }
 }
