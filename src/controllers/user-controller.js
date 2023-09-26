@@ -1,5 +1,3 @@
-const { Model } = require("sequelize");
-
 class UserController {
   constructor(userService) {
     this.userService = userService;
@@ -29,7 +27,6 @@ class UserController {
     const { id } = req.user;
 
     await this.userService.delete(id);
-
     return res.status(200).send();
   }
 }
