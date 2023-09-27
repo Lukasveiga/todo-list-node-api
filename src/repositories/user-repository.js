@@ -1,10 +1,11 @@
-const User = require("../database/model/user");
-
 class UserRepository {
+  constructor(userModel) {
+    this.userModel = userModel;
+  }
   async create(body) {
     const { username, email, password } = body;
 
-    const newUser = await User.create({
+    const newUser = await userModel.create({
       username,
       email,
       password,
@@ -14,7 +15,7 @@ class UserRepository {
   }
 
   async findById(id) {
-    const user = await User.findByPk(id);
+    const user = await userModel.findByPk(id);
 
     if (!user) {
       return null;
@@ -24,7 +25,7 @@ class UserRepository {
   }
 
   async findByEmail(email) {
-    const user = await User.findOne({ where: { email } });
+    const user = await userModel.findOne({ where: { email } });
 
     if (!user) {
       return null;
@@ -34,7 +35,7 @@ class UserRepository {
   }
 
   async update(body, id) {
-    const [updatedRows, [updatedUser]] = await User.update(body, {
+    const [updatedRows, [updatedUser]] = await userModel.update(body, {
       where: { id },
       returning: true,
     });
@@ -47,7 +48,7 @@ class UserRepository {
   }
 
   async delete(id) {
-    await User.destroy({ where: { id } });
+    await userModel.destroy({ where: { id } });
   }
 }
 
