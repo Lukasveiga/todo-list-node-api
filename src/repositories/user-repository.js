@@ -2,7 +2,7 @@ const userModel = require("../database/model/user");
 
 class UserRepository {
   constructor(userModel) {
-    this.userModel = userModel.generateModel();
+    this.userModel = userModel;
   }
   async create(body) {
     const { username, email, password } = body;
