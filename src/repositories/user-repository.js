@@ -1,5 +1,3 @@
-const userModel = require("../database/model/user");
-
 class UserRepository {
   constructor(userModel) {
     this.userModel = userModel;
@@ -54,6 +52,4 @@ class UserRepository {
   }
 }
 
-const userRepository = new UserRepository(userModel);
-
-module.exports = userRepository;
+module.exports = UserRepository;
