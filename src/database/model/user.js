@@ -1,12 +1,13 @@
 const { DataTypes } = require("sequelize");
+const database = require("../connect");
 
 class UserModel {
   constructor(database) {
     this.database = database;
   }
 
-  generateModel(database) {
-    return database.define(
+  generateModel() {
+    return this.database.define(
       "tb_user",
       {
         id: {
@@ -33,4 +34,6 @@ class UserModel {
   }
 }
 
-module.exports = UserModel;
+const userModel = new UserModel(database);
+
+module.exports = userModel;
