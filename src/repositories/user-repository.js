@@ -1,11 +1,13 @@
+const userModel = require("../database/model/user");
+
 class UserRepository {
   constructor(userModel) {
-    this.userModel = userModel;
+    this.userModel = userModel.generateModel();
   }
   async create(body) {
     const { username, email, password } = body;
 
-    const newUser = await userModel.create({
+    const newUser = await this.userModel.create({
       username,
       email,
       password,
@@ -15,7 +17,7 @@ class UserRepository {
   }
 
   async findById(id) {
-    const user = await userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id);
 
     if (!user) {
       return null;
@@ -25,7 +27,7 @@ class UserRepository {
   }
 
   async findByEmail(email) {
-    const user = await userModel.findOne({ where: { email } });
+    const user = await this.userModel.findOne({ where: { email } });
 
     if (!user) {
       return null;
@@ -35,7 +37,7 @@ class UserRepository {
   }
 
   async update(body, id) {
-    const [updatedRows, [updatedUser]] = await userModel.update(body, {
+    const [updatedRows, [updatedUser]] = await this.userModel.update(body, {
       where: { id },
       returning: true,
     });
@@ -48,8 +50,10 @@ class UserRepository {
   }
 
   async delete(id) {
-    await userModel.destroy({ where: { id } });
+    await this.userModel.destroy({ where: { id } });
   }
 }
 
-module.exports = UserRepository;
+const userRepository = new UserRepository(userModel);
+
+module.exports = userRepository;
