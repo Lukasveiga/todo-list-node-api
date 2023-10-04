@@ -23,9 +23,9 @@ class UserService {
       email,
     });
 
-    const { password: _, ...newUserDTO } = newUser;
+    delete newUser.password;
 
-    return newUserDTO;
+    return newUser;
   }
 
   async findById(id) {
@@ -35,9 +35,9 @@ class UserService {
       throw new NotFoundError("User not found.");
     }
 
-    const { password: _, ...userDTO } = user;
+    delete user.password;
 
-    return userDTO;
+    return user;
   }
 
   async findByEmail(email) {
@@ -47,9 +47,9 @@ class UserService {
       throw new NotFoundError("User not found.");
     }
 
-    const { password: _, ...userDTO } = user;
+    delete user.password;
 
-    return userDTO;
+    return user;
   }
 
   async update(body, id) {
@@ -89,9 +89,9 @@ class UserService {
       throw new BadRequestError("Was not possible to update user.");
     }
 
-    const { password: _, ...updatedUserDTO } = updatedUser;
+    delete updatedUser.password;
 
-    return updatedUserDTO;
+    return updatedUser;
   }
 
   async delete(id) {

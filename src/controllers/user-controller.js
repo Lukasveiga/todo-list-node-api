@@ -6,7 +6,11 @@ class UserController {
   async create(req, res) {
     const { username, password, email } = req.body;
 
-    const newUser = await this.userService.create({ username, password, email });
+    const newUser = await this.userService.create({
+      username,
+      password,
+      email,
+    });
     return res.status(201).json(newUser);
   }
 
@@ -19,7 +23,10 @@ class UserController {
     const { username, password, email } = req.body;
     const { id } = req.user;
 
-    const updatedUser = await this.userService.update({ username, password, email }, id);
+    const updatedUser = await this.userService.update(
+      { username, password, email },
+      id
+    );
     return res.status(200).json(updatedUser);
   }
 

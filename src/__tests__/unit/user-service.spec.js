@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const UserService = require("../../services/user-service");
 const { BadRequestError, NotFoundError } = require("../../utils/exceptions");
 
@@ -80,7 +82,9 @@ describe("User Service", () => {
       email: "invalid_email@email.com",
     };
     const promise = sut.create(userTest);
-    expect(promise).rejects.toThrow(new BadRequestError("User already exists."));
+    expect(promise).rejects.toThrow(
+      new BadRequestError("User already exists.")
+    );
   });
 
   test("Should return hashed password when call hash method from Encrypter", async () => {
@@ -139,7 +143,9 @@ describe("User Service", () => {
     const { sut } = makeSut();
 
     const promise = sut.update({ email: "any_email@2email.com" }, "any_id");
-    expect(promise).rejects.toThrow(new BadRequestError("Email already registered."));
+    expect(promise).rejects.toThrow(
+      new BadRequestError("Email already registered.")
+    );
   });
 
   test("Should return updated user dto when update user", async () => {
@@ -158,7 +164,9 @@ describe("User Service", () => {
     userRepositorySpy.userUpdated = null;
 
     const promise = sut.update({}, "any_id");
-    expect(promise).rejects.toThrow(new BadRequestError("Was not possible to update user."));
+    expect(promise).rejects.toThrow(
+      new BadRequestError("Was not possible to update user.")
+    );
   });
 
   test("Should throw if user is not found when delete user", async () => {
