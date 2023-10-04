@@ -3,6 +3,8 @@ const controller = require("../controllers/user-controller");
 
 const router = new Router();
 
-router.get("/", controller.test);
+router.get("/", (req, res) => {
+  res.send("Test");
+});
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const express = require("express");
 const { requestLog, errorHandler } = require("./middlewares");
-const router = require("./routes");
+const { userRoute } = require("./routes");
 require("express-async-errors");
 const helmet = require("helmet");
 
@@ -10,7 +10,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(requestLog);
 
-app.use("/api/v1", router);
+app.use("/api/v1", userRoute);
 
 app.use(errorHandler);
 
