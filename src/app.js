@@ -1,12 +1,15 @@
 const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
+require("express-async-errors");
+
 const { requestLog, errorHandler } = require("./middlewares");
 const { userRoute } = require("./routes");
-require("express-async-errors");
-const helmet = require("helmet");
 
 const app = express();
 
 app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(requestLog);
 
