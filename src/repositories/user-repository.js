@@ -34,6 +34,16 @@ class UserRepository {
     return user.get({ plain: true });
   }
 
+  async findByUsername(username) {
+    const user = await this.userModel.findOne({ where: { username } });
+
+    if (!user) {
+      return null;
+    }
+
+    return user.get({ plain: true });
+  }
+
   async update(body, id) {
     const [updatedRows, [updatedUser]] = await this.userModel.update(body, {
       where: { id },
