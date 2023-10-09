@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const requestBodyValidation = require("../middlewares/request-body-validation");
+const postUserSchema = require("../utils/validation/post-user-schema");
+const putUserSchema = require("../utils/validation/put-user-schema");
 
 const userModel = require("../database/model/user");
 const UserRepository = require("../repositories/user-repository");
@@ -13,9 +15,9 @@ const userController = new UserController(userService);
 
 const router = new Router();
 
-router.post("/", requestBodyValidation, userController.create);
+router.post("/", requestBodyValidation(postUserSchema), userController.create);
 router.get("/", userController.detailUser);
-router.put("/", requestBodyValidation, userController.update);
+router.put("/", requestBodyValidation(putUserSchema), userController.update);
 router.delete("/", userController.delete);
 
 module.exports = router;
