@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const requestBodyValidation = require("../middlewares/request-body-validation");
-const postUserSchema = require("../utils/validation/post-user-schema");
-const putUserSchema = require("../utils/validation/put-user-schema");
+const postUserSchema = require("../utils/validation/user/post-user-schema");
+const putUserSchema = require("../utils/validation/user/put-user-schema");
 
 const userModel = require("../database/model/user");
 const UserRepository = require("../repositories/user-repository");
