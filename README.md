@@ -1,4 +1,4 @@
-# **To-Do List API with nodeJs + Express + MySQL**
+# **To-Do List API with nodeJs + Express + PostgreSQL**
 
 - **User Model:**
 
