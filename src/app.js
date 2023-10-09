@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(requestLog);
 
-app.use("/api/v1", userRoute);
+app.use("/api/v1/user", userRoute);
 
 app.use(errorHandler);
 
