@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const Authentication = require("../../services/auth-service");
-const { NotFoundError } = require("../../utils/exceptions");
+const { NotFoundError, UnauthorizedError } = require("../../utils/exceptions");
 
 const makeUserRepositorySpy = () => {
   class UserRepositorySpy {
@@ -34,12 +34,12 @@ const makeUserRepositorySpy = () => {
 const makeEncrypterSpy = () => {
   class EncrypterSpy {
     async compare(providedPassword, userPassword) {
-      return this.hashedPassword;
+      return this.validPassword;
     }
   }
 
   const encrypterSpy = new EncrypterSpy();
-  encrypterSpy.hashedPassword = false;
+  encrypterSpy.validPassword = false;
 
   return encrypterSpy;
 };
@@ -93,5 +93,18 @@ describe("Authentication Service", () => {
     });
 
     expect(promise).rejects.toThrow(new NotFoundError("User not found"));
+  });
+
+  test("Should throw if invalid password is provided", async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.login({
+      username: "any_username",
+      password: "any_password",
+    });
+
+    expect(promise).rejects.toThrow(
+      new UnauthorizedError("Unauthorized access")
+    );
   });
 });
