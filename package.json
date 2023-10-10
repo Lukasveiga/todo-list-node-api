@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_ENV=prod node ./src/server.js",
     "start:dev": "NODE_ENV=dev node --watch ./src/server.js",
     "test": "jest --colors --noStackTrace --runInBand",
     "test:unit": "npm test -- --watchAll -c ./jest-unit-config.js",
@@ -26,6 +27,7 @@
     "sequelize": "^6.32.1"
   },
   "devDependencies": {
+    "@testcontainers/postgresql": "^10.2.1",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
