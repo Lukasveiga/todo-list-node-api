@@ -3,14 +3,12 @@ const requestBodyValidation = require("../middlewares/request-body-validation");
 const postUserSchema = require("../utils/validation/user/post-user-schema");
 const putUserSchema = require("../utils/validation/user/put-user-schema");
 
-const userModel = require("../database/model/user");
 const UserRepository = require("../repositories/user-repository");
 const Encrypter = require("../utils/encrypter");
 const UserService = require("../services/user-service");
 const UserController = require("../controllers/user-controller");
 
-const userRepository = new UserRepository(userModel);
-const userService = new UserService(userRepository, new Encrypter());
+const userService = new UserService(new UserRepository(), new Encrypter());
 const userController = new UserController(userService);
 
 const router = new Router();
