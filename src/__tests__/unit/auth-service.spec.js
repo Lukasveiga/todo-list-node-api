@@ -46,7 +46,7 @@ const makeEncrypterSpy = () => {
 
 const makeAccessTokenSpy = () => {
   class AccessTokenSpy {
-    async generateAccessToken(id, options) {
+    generateAccessToken(id, options) {
       return this.validAcessToken;
     }
   }
@@ -76,7 +76,7 @@ describe("Authentication Service", () => {
     userRepositorySpy.userByEmail = null;
 
     const promise = sut.login({
-      email: "any_email@email.com",
+      email: "invalid_email@email.com",
       password: "any_password",
     });
 
@@ -88,7 +88,7 @@ describe("Authentication Service", () => {
     userRepositorySpy.userByUsername = null;
 
     const promise = sut.login({
-      username: "any_username",
+      username: "invalid_username",
       password: "any_password",
     });
 
@@ -100,11 +100,41 @@ describe("Authentication Service", () => {
 
     const promise = sut.login({
       username: "any_username",
-      password: "any_password",
+      password: "invalid_password",
     });
 
     expect(promise).rejects.toThrow(
       new UnauthorizedError("Unauthorized access")
     );
+  });
+
+  test("Should return user body dto and access token if login with username is successful", async () => {
+    const { sut, encrypterSpy, accessTokenSpy, userRepositorySpy } = makeSut();
+    encrypterSpy.validPassword = true;
+
+    const result = await sut.login({
+      username: "valid_username",
+      password: "valid_password",
+    });
+
+    const user = userRepositorySpy.userByUsername;
+    delete user.password;
+
+    expect(result).toEqual({ user, token: accessTokenSpy.validAcessToken });
+  });
+
+  test("Should return user body dto and access token if login with email is successful", async () => {
+    const { sut, encrypterSpy, accessTokenSpy, userRepositorySpy } = makeSut();
+    encrypterSpy.validPassword = true;
+
+    const result = await sut.login({
+      email: "valid_email@email.com",
+      password: "valid_password",
+    });
+
+    const user = userRepositorySpy.userByEmail;
+    delete user.password;
+
+    expect(result).toEqual({ user, token: accessTokenSpy.validAcessToken });
   });
 });
