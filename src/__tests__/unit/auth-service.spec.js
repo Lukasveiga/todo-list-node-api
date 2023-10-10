@@ -82,4 +82,16 @@ describe("Authentication Service", () => {
 
     expect(promise).rejects.toThrow(new NotFoundError("User not found"));
   });
+
+  test("Should throw if user is not found by username", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userByUsername = null;
+
+    const promise = sut.login({
+      username: "any_username",
+      password: "any_password",
+    });
+
+    expect(promise).rejects.toThrow(new NotFoundError("User not found"));
+  });
 });
