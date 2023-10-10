@@ -1,6 +1,6 @@
 const { NotFoundError, UnauthorizedError } = require("../utils/exceptions");
 
-class Authentication {
+class AuthService {
   constructor(userRepository, encrypter, accessToken) {
     this.userRepository = userRepository;
     this.encrypter = encrypter;
@@ -43,4 +43,4 @@ class Authentication {
   }
 }
 
-module.exports = Authentication;
+module.exports = AuthService;

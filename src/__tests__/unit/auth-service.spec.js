@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-const Authentication = require("../../services/auth-service");
+const AuthService = require("../../services/auth-service");
 const { NotFoundError, UnauthorizedError } = require("../../utils/exceptions");
 
 const makeUserRepositorySpy = () => {
@@ -61,11 +61,7 @@ const makeSut = () => {
   const userRepositorySpy = makeUserRepositorySpy();
   const encrypterSpy = makeEncrypterSpy();
   const accessTokenSpy = makeAccessTokenSpy();
-  const sut = new Authentication(
-    userRepositorySpy,
-    encrypterSpy,
-    accessTokenSpy
-  );
+  const sut = new AuthService(userRepositorySpy, encrypterSpy, accessTokenSpy);
 
   return { sut, userRepositorySpy, encrypterSpy, accessTokenSpy };
 };
