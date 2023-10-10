@@ -13,11 +13,11 @@ class Authentication {
     let user;
 
     if (username) {
-      user = await this.userRepository.finByUsername(username);
+      user = await this.userRepository.findByUsername(username);
     }
 
     if (email) {
-      user = await this.userRepository.finByEmail(email);
+      user = await this.userRepository.findByEmail(email);
     }
 
     if (!user) {
