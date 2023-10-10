@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const requestBodyValidation = require("../middlewares/request-body-validation");
+const { requestBodyValidation } = require("../middlewares");
 const postLoginSchema = require("../utils/validation/login/post-login-schema");
 
 const AuthController = require("../controllers/auth-controller");
