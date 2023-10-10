@@ -1,4 +1,6 @@
 const { Router } = require("express");
+const requestBodyValidation = require("../middlewares/request-body-validation");
+const postLoginSchema = require("../utils/validation/login/post-login-schema");
 
 const AuthController = require("../controllers/auth-controller");
 const AuthService = require("../services/auth-service");
@@ -15,6 +17,6 @@ const authController = new AuthController(authService);
 
 const router = new Router();
 
-router.post("/", authController.login);
+router.post("/", requestBodyValidation(postLoginSchema), authController.login);
 
 module.exports = router;
