@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "node --watch ./src/server.js",
+    "start:dev": "NODE_ENV=dev node --watch ./src/server.js",
     "test": "jest --colors --noStackTrace --runInBand",
     "test:unit": "npm test -- --watchAll -c ./jest-unit-config.js",
-    "test:int": "npm test -- --watchAll -c ./jest-int-config.js",
+    "test:int": "NODE_ENV=test npm test -- --watchAll -c ./jest-int-config.js",
     "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
