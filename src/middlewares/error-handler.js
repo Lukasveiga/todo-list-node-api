@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { CustomError } = require("../utils/exceptions");
 
 const errorHandler = (error, req, res, next) => {
