@@ -1,17 +1,30 @@
 version: "3.8"
 
 services:
-  database:
+  database-dev:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER_DEV}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_DEV}
+      POSTGRES_DB: ${DB_NAME_DEV}
     ports:
-      - 5432:${DB_PORT}
+      - 5432:${DB_PORT_DEV}
     volumes:
-      - ./db-data/todo-db:/var/lib/postgresql/data
+      - ./db-data/todo-db-dev:/var/lib/postgresql/data
+
+  database-test:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER_TEST}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_TEST}
+      POSTGRES_DB: ${DB_NAME_TEST}
+    ports:
+      - 5432:${DB_PORT_TEST}
+    volumes:
+      - ./db-data/todo-db-test:/var/lib/postgresql/data
 
 volumes:
-  todo-db:
+  todo-db-dev:
+  todo-db-test:
