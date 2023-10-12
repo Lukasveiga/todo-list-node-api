@@ -116,4 +116,16 @@ describe("Auth Controller", () => {
       index++;
     }
   });
+
+  test("Should return 400 when invalid email is provided", async () => {
+    const login = {
+      email: "invalid_email",
+      password: "any_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Invalid email");
+  });
 });
