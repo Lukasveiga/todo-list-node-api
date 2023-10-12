@@ -13,6 +13,10 @@ const makeUserRepositorySpy = () => {
       return this.userByEmail;
     }
 
+    async findByUsername(username) {
+      return this.userByUsername;
+    }
+
     async findById(id) {
       return this.userById;
     }
@@ -32,6 +36,7 @@ const makeUserRepositorySpy = () => {
 
   const userRepositorySpy = new UserRepositorySpy();
   userRepositorySpy.userByEmail = userTest;
+  userRepositorySpy.userByUsername = userTest;
   userRepositorySpy.userById = userTest;
   userRepositorySpy.userUpdated = userTest;
 
@@ -62,6 +67,7 @@ describe("User Service", () => {
   test("Should return user dto body when create a new user", async () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.userByEmail = null;
+    userRepositorySpy.userByUsername = null;
     const userTest = {
       username: "any_username",
       email: "any_email@email.com",
@@ -76,10 +82,23 @@ describe("User Service", () => {
 
   test("Should throw if email provided is already registered in db", async () => {
     const { sut, userRepositorySpy } = makeSut();
-    userRepositorySpy.userByEmail = true;
+    userRepositorySpy.userByUsername = null;
 
     const userTest = {
       email: "invalid_email@email.com",
+    };
+    const promise = sut.create(userTest);
+    expect(promise).rejects.toThrow(
+      new BadRequestError("User already exists.")
+    );
+  });
+
+  test("Should throw if username provided is already registered in db", async () => {
+    const { sut, userRepositorySpy } = makeSut();
+    userRepositorySpy.userByEmail = null;
+
+    const userTest = {
+      username: "invalid_username",
     };
     const promise = sut.create(userTest);
     expect(promise).rejects.toThrow(

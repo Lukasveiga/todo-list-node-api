@@ -13,7 +13,7 @@ const makeUserRepositorySpy = () => {
       return this.userByEmail;
     }
 
-    async findByUsername(id) {
+    async findByUsername(username) {
       return this.userByUsername;
     }
   }
