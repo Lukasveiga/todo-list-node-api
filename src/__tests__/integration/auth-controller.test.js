@@ -75,4 +75,16 @@ describe("Auth Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Unauthorized access");
   });
+
+  test("Should return 401 when invalid password with username are provided", async () => {
+    const login = {
+      username: "valid_username",
+      password: "invalid_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Unauthorized access");
+  });
 });
