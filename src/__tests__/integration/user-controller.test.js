@@ -111,4 +111,35 @@ describe("User Controller", () => {
       "Password must be at least 5 characters long"
     );
   });
+
+  test("should return status code 400 when empty params are provided", async () => {
+    const userCases = [].concat(
+      {
+        username: "",
+        email: "any_email@email.com",
+        password: "any_password",
+      },
+      {
+        username: "any_username",
+        email: "",
+        password: "any_password",
+      },
+      {
+        username: "any_username",
+        email: "any_email@email.com",
+        password: "",
+      }
+    );
+
+    const fields = ["Username", "Email", "Password"];
+    let index = 0;
+    for (const userCase of userCases) {
+      const response = await request(app).post("/api/v1/user").send(userCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(`${fields[index]} cannot be empty`);
+
+      index++;
+    }
+  });
 });
