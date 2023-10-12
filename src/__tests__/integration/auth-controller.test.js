@@ -16,7 +16,7 @@ describe("Auth Controller", () => {
   afterAll(async () => {
     await sequelize.sync({ force: true });
   });
-  test("Should return 200 when login with valid email and password are provided", async () => {
+  test("Should return 200 when valid email and password are provided", async () => {
     const login = {
       email: "valid_email@email.com",
       password: "valid_password",
@@ -28,7 +28,7 @@ describe("Auth Controller", () => {
     expect(response.body.token).not.toBeNull();
   });
 
-  test("Should return 200 when login with valid username and password are provided", async () => {
+  test("Should return 200 when valid username and password are provided", async () => {
     const login = {
       username: "valid_username",
       password: "valid_password",
@@ -40,7 +40,7 @@ describe("Auth Controller", () => {
     expect(response.body.token).not.toBeNull();
   });
 
-  test("Should return 404 when invalid username are provided", async () => {
+  test("Should return 404 when invalid username is provided", async () => {
     const login = {
       username: "invalid_username",
       password: "any_password",
@@ -52,7 +52,7 @@ describe("Auth Controller", () => {
     expect(response.body.message).toBe("User not found");
   });
 
-  test("Should return 404 when invalid email are provided", async () => {
+  test("Should return 404 when invalid email is provided", async () => {
     const login = {
       email: "invalid_email@email.com",
       password: "any_password",
@@ -64,7 +64,7 @@ describe("Auth Controller", () => {
     expect(response.body.message).toBe("User not found");
   });
 
-  test("Should return 401 when invalid password with email are provided", async () => {
+  test("Should return 401 when invalid password with email is provided", async () => {
     const login = {
       email: "valid_email@email.com",
       password: "invalid_password",
@@ -76,7 +76,7 @@ describe("Auth Controller", () => {
     expect(response.body.message).toBe("Unauthorized access");
   });
 
-  test("Should return 401 when invalid password with username are provided", async () => {
+  test("Should return 401 when invalid password with username is provided", async () => {
     const login = {
       username: "valid_username",
       password: "invalid_password",
