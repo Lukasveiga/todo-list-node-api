@@ -87,4 +87,15 @@ describe("Auth Controller", () => {
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Unauthorized access");
   });
+
+  test("Should return 400 when email and username are not provided", async () => {
+    const login = {
+      password: "invalid_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("You must enter with username or email");
+  });
 });
