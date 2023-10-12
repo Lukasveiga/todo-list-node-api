@@ -32,10 +32,7 @@ class AuthService {
 
     const { id } = user;
     const options = { expiresIn: "10m" };
-    const validAccessToken = this.accessToken.generateAccessToken(
-      { id },
-      options
-    );
+    const validAccessToken = this.accessToken.generate({ id }, options);
 
     delete user.password;
 

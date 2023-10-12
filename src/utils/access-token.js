@@ -2,12 +2,12 @@ const jwt = require("jsonwebtoken");
 const { UnauthorizedError } = require("./exceptions");
 
 class AccessToken {
-  generateAccessToken(payload, options) {
+  generate(payload, options) {
     const accessToken = jwt.sign(payload, process.env.SECRET_KEY, options);
     return accessToken;
   }
 
-  validateAccessToken(token) {
+  validate(token) {
     try {
       const payload = jwt.verify(token, process.env.SECRET_KEY);
       return payload;
