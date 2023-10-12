@@ -64,19 +64,19 @@ const makeSut = () => {
 };
 
 describe("User Service", () => {
-  test("Should return user dto body when create a new user", async () => {
+  test("Should return user dto body when created a new user", async () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.userByEmail = null;
     userRepositorySpy.userByUsername = null;
     const userTest = {
-      username: "any_username",
-      email: "any_email@email.com",
-      password: "any_password",
+      username: "valid_username",
+      email: "valid_email@email.com",
+      password: "valid_password",
     };
     const userDTO = await sut.create(userTest);
     expect(userDTO).toEqual({
-      username: "any_username",
-      email: "any_email@email.com",
+      username: "valid_username",
+      email: "valid_email@email.com",
     });
   });
 
