@@ -9,9 +9,11 @@ class UserService {
   async create(body) {
     const { username, password, email } = body;
 
-    const existingUser = await this.userRepository.findByEmail(email);
+    const existingUserByEmail = await this.userRepository.findByEmail(email);
+    const existingUserByUsername =
+      await this.userRepository.findByUsername(username);
 
-    if (existingUser) {
+    if (existingUserByEmail || existingUserByUsername) {
       throw new BadRequestError("User already exists.");
     }
 
