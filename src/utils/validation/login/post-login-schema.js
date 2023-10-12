@@ -23,7 +23,7 @@ const postLoginSchema = joi
     email: joi.string().email().messages(emailMessage),
     password: joi.string().required().messages(passwordMessage),
   })
-  .or("usename", "email")
+  .or("username", "email")
   .messages(genericMessage);
 
 module.exports = postLoginSchema;
