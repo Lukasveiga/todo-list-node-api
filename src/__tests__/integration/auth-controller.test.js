@@ -16,5 +16,27 @@ describe("Auth Controller", () => {
   afterAll(async () => {
     await sequelize.sync({ force: true });
   });
-  test("", () => {});
+  test("Should return 200 when login with valid email and password are provided", async () => {
+    const login = {
+      email: "valid_email@email.com",
+      password: "valid_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(200);
+    expect(response.body.token).not.toBeNull();
+  });
+
+  test("Should return 200 when login with valid username and password are provided", async () => {
+    const login = {
+      username: "valid_username",
+      password: "valid_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(200);
+    expect(response.body.token).not.toBeNull();
+  });
 });
