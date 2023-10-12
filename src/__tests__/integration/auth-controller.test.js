@@ -39,4 +39,16 @@ describe("Auth Controller", () => {
     expect(response.status).toBe(200);
     expect(response.body.token).not.toBeNull();
   });
+
+  test("Should return 400 when invalid username are provided", async () => {
+    const login = {
+      username: "invalid_username",
+      password: "any_password",
+    };
+
+    const response = await request(app).post("/api/v1/login").send(login);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("User not found");
+  });
 });
