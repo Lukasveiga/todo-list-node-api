@@ -270,6 +270,25 @@ describe("User Controller", () => {
     expect(response.body.message).toBe("Invalid email");
   });
 
+  test("should return status code 200 when valid params are provided to update user", async () => {
+    const updateUser = {
+      username: "valid_username_update",
+      email: "valid_email_update@email.com",
+      password: "valid_password_update",
+    };
+
+    const response = await request(app)
+      .put("/api/v1/user")
+      .set("Authorization", `Bearer ${token}`)
+      .send(updateUser);
+
+    const { id, ...user } = response.body;
+    delete updateUser.password;
+
+    expect(response.status).toBe(200);
+    expect(user).toEqual(updateUser);
+  });
+
   test("should return status code 204 when valid access token is provided to delete user", async () => {
     const response = await request(app)
       .delete(`/api/v1/user`)
