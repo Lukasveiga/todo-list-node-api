@@ -46,7 +46,7 @@ const makeEncrypterSpy = () => {
 
 const makeAccessTokenSpy = () => {
   class AccessTokenSpy {
-    generateAccessToken(id, options) {
+    generate(id, options) {
       return this.validAcessToken;
     }
   }
