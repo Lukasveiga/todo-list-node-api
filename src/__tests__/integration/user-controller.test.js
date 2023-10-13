@@ -159,6 +159,19 @@ describe("User Controller", () => {
     }
   });
 
+  test("should return status code 401 when invalid access token is provided to get user details", async () => {
+    const invalidToken = "invalid_token";
+
+    const response = await request(app)
+      .get("/api/v1/user")
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    const { id, ...user } = response.body;
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Unauthorized access");
+  });
+
   test("should return status code 200 and user details when valid access token is provided", async () => {
     const response = await request(app)
       .get("/api/v1/user")
