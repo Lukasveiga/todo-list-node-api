@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const UserService = require("../../services/user-service");
-const { BadRequestError, NotFoundError } = require("../../utils/exceptions");
+const UserService = require("../../../services/user-service");
+const { BadRequestError, NotFoundError } = require("../../../utils/exceptions");
 
 const makeUserRepositorySpy = () => {
   class UserRepositorySpy {
