@@ -207,6 +207,18 @@ describe("User Controller", () => {
     });
   });
 
+  test("should return status code 400 if empty body is provided to update user", async () => {
+    const response = await request(app)
+      .put("/api/v1/user")
+      .set("Authorization", `Bearer ${token}`)
+      .send({});
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(
+      "You must enter at least one field (username, email, password)"
+    );
+  });
+
   test("should return status code 204 when valid access token is provided to delete user", async () => {
     const response = await request(app)
       .delete(`/api/v1/user`)
