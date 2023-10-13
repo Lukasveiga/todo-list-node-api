@@ -159,6 +159,19 @@ describe("User Controller", () => {
     }
   });
 
+  test("should return status code 401 when try to access protected routes without access token", async () => {
+    const requestCases = [].concat(
+      await request(app).get("/api/v1/user"),
+      await request(app).put("/api/v1/user"),
+      await request(app).delete("/api/v1/user")
+    );
+
+    for (const requestCase of requestCases) {
+      expect(requestCase.status).toBe(401);
+      expect(requestCase.body.message).toBe("Unauthorized access");
+    }
+  });
+
   test("should return status code 401 when invalid access token is provided to get user details", async () => {
     const invalidToken = "invalid_token";
 
