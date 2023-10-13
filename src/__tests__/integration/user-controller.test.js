@@ -219,6 +219,33 @@ describe("User Controller", () => {
     );
   });
 
+  test("should return status code 400 when empty params are provided", async () => {
+    const updateCases = [].concat(
+      await request(app)
+        .put("/api/v1/user")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ username: "" }),
+      await request(app)
+        .put("/api/v1/user")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ email: "" }),
+      await request(app)
+        .put("/api/v1/user")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ password: "" })
+    );
+
+    const fields = ["Username", "Email", "Password"];
+    let index = 0;
+
+    for (const updateCase of updateCases) {
+      expect(updateCase.status).toBe(400);
+      expect(updateCase.body.message).toBe(`${fields[index]} cannot be empty`);
+
+      index++;
+    }
+  });
+
   test("should return status code 204 when valid access token is provided to delete user", async () => {
     const response = await request(app)
       .delete(`/api/v1/user`)
