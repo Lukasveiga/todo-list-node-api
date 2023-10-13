@@ -4,15 +4,31 @@ const { app } = require("../../app");
 const request = require("supertest");
 const sequelize = require("../../database/connect");
 
+let token;
+
 describe("User Controller", () => {
+  beforeAll(async () => {
+    const userLogin = {
+      username: "valid_username",
+      email: "valid_email@email.com",
+      password: "valid_password",
+    };
+    await request(app).post("/api/v1/user").send(userLogin);
+
+    const loginResponse = await request(app)
+      .post("/api/v1/login")
+      .send({ username: "valid_username", password: "valid_password" });
+
+    token = loginResponse.body.token;
+  });
   afterAll(async () => {
     await sequelize.sync({ force: true });
   });
 
   test("should create new user and return status 201", async () => {
     const userTest = {
-      username: "valid_username",
-      email: "valid_email@email.com",
+      username: "valid_username2",
+      email: "valid_email2@email.com",
       password: "valid_password",
     };
     const response = await request(app).post("/api/v1/user").send(userTest);
@@ -141,5 +157,19 @@ describe("User Controller", () => {
 
       index++;
     }
+  });
+
+  test("should return status code 200 and user details when valid access token is provided", async () => {
+    const response = await request(app)
+      .get("/api/v1/user")
+      .set("Authorization", `Bearer ${token}`);
+
+    const { id, ...user } = response.body;
+
+    expect(response.status).toBe(200);
+    expect(user).toEqual({
+      username: "valid_username",
+      email: "valid_email@email.com",
+    });
   });
 });
