@@ -20,3 +20,5 @@ services:
       POSTGRES_DB: ${DB_NAME_DEV}
     ports:
       - 5432:${DB_PORT_DEV}
+    volumes:
+      - todo_db:/var/lib/postgresql/data
