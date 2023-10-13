@@ -172,15 +172,25 @@ describe("User Controller", () => {
     }
   });
 
-  test("should return status code 401 when invalid access token is provided to get user details", async () => {
+  test("should return status code 401 when try to access protected routes with invalid access token", async () => {
     const invalidToken = "invalid_token";
 
-    const response = await request(app)
-      .get("/api/v1/user")
-      .set("Authorization", `Bearer ${invalidToken}`);
+    const requestCases = [].concat(
+      await request(app)
+        .get("/api/v1/user")
+        .set("Authorization", `Bearer ${invalidToken}`),
+      await request(app)
+        .put("/api/v1/user")
+        .set("Authorization", `Bearer ${invalidToken}`),
+      await request(app)
+        .delete("/api/v1/user")
+        .set("Authorization", `Bearer ${invalidToken}`)
+    );
 
-    expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Unauthorized access");
+    for (const requestCase of requestCases) {
+      expect(requestCase.status).toBe(401);
+      expect(requestCase.body.message).toBe("Unauthorized access");
+    }
   });
 
   test("should return status code 200 and user details when valid access token is provided", async () => {
