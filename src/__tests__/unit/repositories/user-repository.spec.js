@@ -73,4 +73,9 @@ describe("User Repository", () => {
     );
     expect(user).toBeNull();
   });
+
+  test("Should not throw when delete user", async () => {
+    const promise = userRepository.delete(1);
+    expect(promise).resolves.not.toThrow();
+  });
 });
