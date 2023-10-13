@@ -21,9 +21,14 @@ describe("User Repository", () => {
     expect(user).toEqual(userTest);
   });
 
-  test("Should return user body when find a user by id", async () => {
+  test("Should return user body when user is found by id", async () => {
     const user = await userRepository.findById(1);
     delete user.id;
     expect(user).toEqual(userTest);
+  });
+
+  test("Should return null when user is not found by id", async () => {
+    const user = await userRepository.findById(2);
+    expect(user).toBeNull();
   });
 });
