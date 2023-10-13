@@ -22,3 +22,5 @@ services:
       - 5432:${DB_PORT_DEV}
     volumes:
       - todo_db:/var/lib/postgresql/data
+volumes:
+  todo_db:
