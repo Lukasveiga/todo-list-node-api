@@ -63,4 +63,14 @@ describe("User Repository", () => {
     );
     expect(user.username).toEqual("valid_username_update");
   });
+
+  test("Should return null if user is not updated", async () => {
+    const user = await userRepository.update(
+      {
+        username: "any_username_update",
+      },
+      2
+    );
+    expect(user).toBeNull();
+  });
 });
