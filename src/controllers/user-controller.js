@@ -34,7 +34,7 @@ class UserController {
     const { id } = req.user;
 
     await this.userService.delete(id);
-    return res.status(200).send();
+    return res.status(204).send();
   }
 }
 
