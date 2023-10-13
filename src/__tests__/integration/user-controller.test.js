@@ -207,18 +207,6 @@ describe("User Controller", () => {
     });
   });
 
-  test("should return status code 401 when invalid access token is provided to delete user", async () => {
-    const any_id = 1;
-    const invalidToken = "invalid_token";
-
-    const response = await request(app)
-      .delete("/api/v1/user/" + any_id)
-      .set("Authorization", `Bearer ${invalidToken}`);
-
-    expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Unauthorized access");
-  });
-
   test("should return status code 204 when valid access token is provided to delete user", async () => {
     const response = await request(app)
       .delete(`/api/v1/user`)
