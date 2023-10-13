@@ -31,4 +31,15 @@ describe("User Repository", () => {
     const user = await userRepository.findById(2);
     expect(user).toBeNull();
   });
+
+  test("Should return user body when user is found by email", async () => {
+    const user = await userRepository.findByEmail("valid_email@email.com");
+    delete user.id;
+    expect(user).toEqual(userTest);
+  });
+
+  test("Should return null when user is not found by email", async () => {
+    const user = await userRepository.findByEmail("invalid_email@email.com");
+    expect(user).toBeNull();
+  });
 });
