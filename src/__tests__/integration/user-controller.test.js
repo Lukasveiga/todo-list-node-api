@@ -179,8 +179,6 @@ describe("User Controller", () => {
       .get("/api/v1/user")
       .set("Authorization", `Bearer ${invalidToken}`);
 
-    const { id, ...user } = response.body;
-
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Unauthorized access");
   });
@@ -197,5 +195,25 @@ describe("User Controller", () => {
       username: "valid_username",
       email: "valid_email@email.com",
     });
+  });
+
+  test("should return status code 401 when invalid access token is provided to delete user", async () => {
+    const any_id = 1;
+    const invalidToken = "invalid_token";
+
+    const response = await request(app)
+      .delete("/api/v1/user/" + any_id)
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Unauthorized access");
+  });
+
+  test("should return status code 204 when valid access token is provided to delete user", async () => {
+    const response = await request(app)
+      .delete(`/api/v1/user`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(204);
   });
 });
