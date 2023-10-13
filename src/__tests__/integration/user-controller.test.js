@@ -260,6 +260,16 @@ describe("User Controller", () => {
     );
   });
 
+  test("should return status code 400 when invalid email is provided to update user", async () => {
+    const response = await request(app)
+      .put("/api/v1/user")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ email: "invalid_email" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Invalid email");
+  });
+
   test("should return status code 204 when valid access token is provided to delete user", async () => {
     const response = await request(app)
       .delete(`/api/v1/user`)
