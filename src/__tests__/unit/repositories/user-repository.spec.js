@@ -53,4 +53,14 @@ describe("User Repository", () => {
     const user = await userRepository.findByUsername("invalid_username");
     expect(user).toBeNull();
   });
+
+  test("Should return user body when user is updated", async () => {
+    const user = await userRepository.update(
+      {
+        username: "valid_username_update",
+      },
+      1
+    );
+    expect(user.username).toEqual("valid_username_update");
+  });
 });
