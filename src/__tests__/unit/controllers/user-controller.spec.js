@@ -19,6 +19,10 @@ const makeUserServiceSpy = () => {
     async update(body, id) {
       return this.serviceUserTest;
     }
+
+    async delete(id) {
+      return this.serviceUserTest;
+    }
   }
   const { password, ...user } = userTest;
 
@@ -95,5 +99,24 @@ describe("User Controller", () => {
 
     expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith(user)).to.be.true;
+  });
+
+  test("Should return status code 204 and no body content when delete user", async () => {
+    const res = {
+      status: sinon.stub().returnsThis(),
+      send: sinon.spy(),
+    };
+
+    const req = {
+      user: { id: "any_id" },
+    };
+
+    const { sut } = makeSut();
+
+    await sut.delete(req, res);
+
+    expect(res.status.calledWith(204)).to.be.true;
+    expect(res.send.calledOnce).to.be.true;
+    expect(res.send.calledWith()).to.be.true;
   });
 });
