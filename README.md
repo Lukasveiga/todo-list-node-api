@@ -28,6 +28,8 @@
 
 ## **Check List Future Features to be implemented:**
 
-- [ ] Endpoints with validation (express-validator);
-- [ ] Authentication and Authorization (JWT) and in-memory data store (Redis);
-- [ ] Unit and Integration tests (Jest);
+- [x] Endpoints with validation (joi);
+- [x] Authentication (JWT)
+- [ ] In-memory data store (Redis);
+- [ ] Logs with Pino;
+- [x] Unit and Integration tests (Jest);
