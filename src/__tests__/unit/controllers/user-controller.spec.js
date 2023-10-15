@@ -15,6 +15,10 @@ const makeUserServiceSpy = () => {
     async create(body) {
       return this.serviceUserTest;
     }
+
+    async update(body, id) {
+      return this.serviceUserTest;
+    }
   }
   const { password, ...user } = userTest;
 
@@ -67,6 +71,27 @@ describe("User Controller", () => {
     const { sut } = makeSut();
 
     await sut.detailUser(req, res);
+
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(user)).to.be.true;
+  });
+
+  test("Should return status code 200 and user body dto when update a user", async () => {
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.spy(),
+    };
+
+    const req = {
+      body: userTest,
+      user: { id: "any_id" },
+    };
+
+    const { sut } = makeSut();
+
+    await sut.update(req, res);
+
+    const { password, ...user } = userTest;
 
     expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith(user)).to.be.true;
