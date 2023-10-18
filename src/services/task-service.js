@@ -20,7 +20,7 @@ class TaskService {
   }
 
   async update(body, taskId, userId) {
-    const task = await this.taskRepository.findById(taskId);
+    const task = await this.taskRepository.findById(taskId, userId);
 
     if (!task) {
       throw new NotFoundError("Task not found.");
@@ -62,6 +62,18 @@ class TaskService {
     await this.cacheStorage.setStaleStatus(`findAll(${userId}):stale`, "true");
 
     return updatedTask;
+  }
+
+  async delete(taskId, userId) {
+    const task = this.taskRepository.findById(taskId, userId);
+
+    if (!task) {
+      throw new NotFoundError("Task not found.");
+    }
+
+    await this.cacheStorage.setStaleStatus(`findAll(${userId}):stale`, "true");
+
+    await this.taskRepository.delete(taskId, userId);
   }
 }
 
