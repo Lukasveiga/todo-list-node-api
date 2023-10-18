@@ -59,7 +59,7 @@ class TaskService {
       throw new BadRequestError("Was not possible to update task.");
     }
 
-    await this.cacheStorage.setStaleStatus(`findAll(${userId}):stale`, "true");
+    await this.cacheStorage.setStaleStatus(`findAll(${userId})`, "true");
 
     return updatedTask;
   }
@@ -71,9 +71,53 @@ class TaskService {
       throw new NotFoundError("Task not found.");
     }
 
-    await this.cacheStorage.setStaleStatus(`findAll(${userId}):stale`, "true");
+    await this.cacheStorage.setStaleStatus(`findAll(${userId})`, "true");
 
     await this.taskRepository.delete(taskId, userId);
+  }
+
+  async findAll(options, userId) {
+    const { finished, sortByDate } = options;
+
+    let tasks;
+
+    const isTasksFromCacheStale = await this.cacheStorage.isStale(
+      `findAll(${userId})`
+    );
+
+    const isRefetching = await this.cacheStorage.isRefetching(
+      `findAll(${userId})`
+    );
+
+    if (isTasksFromCacheStale && !isRefetching) {
+      await this.cacheStorage.setRefetchingStatus(
+        `findAll(${userId})`,
+        "true",
+        { EX: 10 }
+      );
+      tasks = await this.taskRepository.findAll(userId);
+      await this.cacheStorage.setData(`findAll(${userId})`, tasks, { EX: 900 });
+      await this.cacheStorage.cleanStaleStatus(`findAll(${userId})`);
+      await this.cacheStorage.cleanRefetchingStatus(`findAll(${userId})`);
+    } else {
+      tasks = await this.cacheStorage.getDate(`findAll(${userId})`);
+    }
+
+    if (!finished) {
+      tasks = tasks.filter((task) => !task.finished);
+    }
+
+    if (sortByDate) {
+      tasks.sort((a, b) => {
+        if (sortByDate === "asc") {
+          return a.createdAt - b.createdAt;
+        } else if (sortByDate === "desc") {
+          return b.createdAt - a.createdAt;
+        }
+      });
+    }
+
+    return tasks;
   }
 }
 
