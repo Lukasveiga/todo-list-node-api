@@ -16,6 +16,8 @@ const makeTaskRepositorySpy = () => {
     async update(body, taskId, userId) {
       return this.updateTaskTest;
     }
+
+    async delete(taskId, userId) {}
   }
 
   const taskTest = {
@@ -53,7 +55,7 @@ const makeSut = () => {
 };
 
 describe("Task Service", () => {
-  test("Should return a task body when created a new task", async () => {
+  test("Should return a task body when a new task is created ", async () => {
     const { sut, cacheStorageSpy, taskRepositorySpy } = makeSut();
 
     const task = {
@@ -78,7 +80,7 @@ describe("Task Service", () => {
     expect(promise).rejects.toThrow(new NotFoundError("Task not found."));
   });
 
-  test("Should return a task body when updated a task", async () => {
+  test("Should return a task body when a task is updated ", async () => {
     const { sut, cacheStorageSpy, taskRepositorySpy } = makeSut();
 
     const task = {
@@ -92,5 +94,15 @@ describe("Task Service", () => {
 
     expect(updatedTask).toEqual(taskRepositorySpy.createTaskTest);
     expect(cacheStorageSpy.staleStatusTest).toBe(true);
+  });
+
+  test("Should throw if task was not found when try to delete a task", async () => {
+    const { sut, taskRepositorySpy } = makeSut();
+
+    taskRepositorySpy.findByIdTaskTest = null;
+
+    const promise = sut.delete("any_task_id", "any_user_id");
+
+    expect(promise).rejects.toThrow(new NotFoundError("Task not found."));
   });
 });
