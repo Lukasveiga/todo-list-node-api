@@ -105,4 +105,15 @@ describe("Task Service", () => {
 
     expect(promise).rejects.toThrow(new NotFoundError("Task not found."));
   });
+
+  test("Should not throw when delete task", async () => {
+    const { sut, cacheStorageSpy } = makeSut();
+
+    const promise = sut.delete("any_task_id", "any_user_id");
+
+    expect(promise).resolves.not.toThrow();
+    promise.then(() => {
+      expect(cacheStorageSpy.staleStatusTest).toBe(true);
+    });
+  });
 });
