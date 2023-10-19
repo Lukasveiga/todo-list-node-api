@@ -1,4 +1,4 @@
-const { NotFoundError, BadRequestError } = require("../utils/exceptions");
+const { NotFoundError } = require("../utils/exceptions");
 
 class TaskService {
   constructor(taskRepository, cacheStorage) {
@@ -54,10 +54,6 @@ class TaskService {
       taskId,
       userId
     );
-
-    if (!updatedTask) {
-      throw new BadRequestError("Was not possible to update task.");
-    }
 
     await this.cacheStorage.setStaleStatus(`findAll(${userId})`, "true");
 
