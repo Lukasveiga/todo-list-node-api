@@ -61,7 +61,7 @@ class TaskService {
   }
 
   async delete(taskId, userId) {
-    const task = this.taskRepository.findById(taskId, userId);
+    const task = await this.taskRepository.findById(taskId, userId);
 
     if (!task) {
       throw new NotFoundError("Task not found.");
