@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const TaskService = require("../../../services/task-service");
+const { NotFoundError } = require("../../../utils/exceptions");
 
 const makeTaskRepositorySpy = () => {
   class TaskRepositorySpy {
     async create(body, userId) {
       return this.createTaskTest;
+    }
+
+    async findById(taskId, userId) {
+      return this.updateTaskTest;
     }
   }
 
@@ -17,6 +22,7 @@ const makeTaskRepositorySpy = () => {
 
   const taskRepositorySpy = new TaskRepositorySpy();
   taskRepositorySpy.createTaskTest = taskTest;
+  taskRepositorySpy.updateTaskTest = taskTest;
 
   return taskRepositorySpy;
 };
@@ -55,5 +61,15 @@ describe("Task Service", () => {
 
     expect(newTask).toEqual(taskRepositorySpy.createTaskTest);
     expect(cacheStorageSpy.staleStatusTest).toBe(true);
+  });
+
+  test("Should throw if task was not found when try to update a task", async () => {
+    const { sut, taskRepositorySpy } = makeSut();
+
+    taskRepositorySpy.updateTaskTest = null;
+
+    const promise = sut.update("any_task_id", "any_user_id");
+
+    expect(promise).rejects.toThrow(new NotFoundError("Task not found."));
   });
 });
