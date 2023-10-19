@@ -10,19 +10,24 @@ const makeTaskRepositorySpy = () => {
     }
 
     async findById(taskId, userId) {
+      return this.findByIdTaskTest;
+    }
+
+    async update(body, taskId, userId) {
       return this.updateTaskTest;
     }
   }
 
   const taskTest = {
     title: "valid_title",
-    description: "valid description",
+    description: "valid_description",
     priority: "any_priority",
   };
 
   const taskRepositorySpy = new TaskRepositorySpy();
   taskRepositorySpy.createTaskTest = taskTest;
   taskRepositorySpy.updateTaskTest = taskTest;
+  taskRepositorySpy.findByIdTaskTest = taskTest;
 
   return taskRepositorySpy;
 };
@@ -53,7 +58,7 @@ describe("Task Service", () => {
 
     const task = {
       title: "valid_title",
-      description: "valid description",
+      description: "valid_description",
       priority: "any_priority",
     };
 
@@ -66,10 +71,26 @@ describe("Task Service", () => {
   test("Should throw if task was not found when try to update a task", async () => {
     const { sut, taskRepositorySpy } = makeSut();
 
-    taskRepositorySpy.updateTaskTest = null;
+    taskRepositorySpy.findByIdTaskTest = null;
 
     const promise = sut.update("any_task_id", "any_user_id");
 
     expect(promise).rejects.toThrow(new NotFoundError("Task not found."));
+  });
+
+  test("Should return a task body when updated a task", async () => {
+    const { sut, cacheStorageSpy, taskRepositorySpy } = makeSut();
+
+    const task = {
+      title: "valid_title",
+      description: "valid_description",
+      priority: "any_priority",
+      finished: true,
+    };
+
+    const updatedTask = await sut.update(task, "any_task_id", "any_user_id");
+
+    expect(updatedTask).toEqual(taskRepositorySpy.createTaskTest);
+    expect(cacheStorageSpy.staleStatusTest).toBe(true);
   });
 });
