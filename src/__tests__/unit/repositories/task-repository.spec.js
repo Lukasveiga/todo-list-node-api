@@ -89,4 +89,10 @@ describe("Task Repository", () => {
 
     expect(updatedTask).toBeNull();
   });
+
+  test("Should not throw when delete task", async () => {
+    const promise = taskRepository.delete(taskId, userId);
+
+    expect(promise).resolves.not.toThrow();
+  });
 });
