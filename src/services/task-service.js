@@ -77,6 +77,10 @@ class TaskService {
 
     let tasks;
 
+    const tasksFromCache = await this.cacheStorage.getDate(
+      `findAll(${userId})`
+    );
+
     const isTasksFromCacheStale = await this.cacheStorage.isStale(
       `findAll(${userId})`
     );
@@ -85,7 +89,7 @@ class TaskService {
       `findAll(${userId})`
     );
 
-    if (isTasksFromCacheStale && !isRefetching) {
+    if ((isTasksFromCacheStale && !isRefetching) || !tasksFromCache) {
       await this.cacheStorage.setRefetchingStatus(
         `findAll(${userId})`,
         "true",
