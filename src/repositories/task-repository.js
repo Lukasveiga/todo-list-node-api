@@ -13,6 +13,12 @@ class TaskRepository {
 
     return newTask.get({ plain: true });
   }
+
+  async findAll(userId) {
+    const tasks = await taskModel.findAll({ where: { id_user: userId } });
+
+    return tasks;
+  }
 }
 
 module.exports = TaskRepository;
