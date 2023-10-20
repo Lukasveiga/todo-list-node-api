@@ -48,7 +48,7 @@ describe("Task Repository", () => {
   });
 
   test("Should return null when task is not found by id", async () => {
-    const task = await taskRepository.findById(5, 1);
+    const task = await taskRepository.findById(5, userId);
 
     expect(task).toBeNull();
   });
@@ -77,5 +77,16 @@ describe("Task Repository", () => {
     const { title, description, priority } = updatedTask;
 
     expect({ title, description, priority }).toEqual(updateTaskTest);
+  });
+
+  test("Should return null when task is not found by id when trying to update the task", async () => {
+    const updateTaskTest = {
+      title: "update_title",
+      description: "update_description",
+      priority: 2,
+    };
+    const updatedTask = await taskRepository.update(updateTaskTest, 5, userId);
+
+    expect(updatedTask).toBeNull();
   });
 });
