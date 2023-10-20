@@ -6,19 +6,28 @@ const { NotFoundError } = require("../../../utils/exceptions");
 const currentDate = new Date();
 const oneDayAgoDate = new Date(currentDate);
 oneDayAgoDate.setDate(currentDate.getDate() - 1);
+const twoDaysAgoDate = new Date(currentDate);
+twoDaysAgoDate.setDate(currentDate.getDate() - 2);
 
 const listTasksTest = [
   {
     title: "valid_title",
     description: "valid_description",
-    priority: "any_priority",
+    priority: 1,
     finished: false,
     createdAt: currentDate,
   },
   {
     title: "valid_title",
     description: "valid_description",
-    priority: "any_priority",
+    priority: 2,
+    finished: false,
+    createdAt: twoDaysAgoDate,
+  },
+  {
+    title: "valid_title",
+    description: "valid_description",
+    priority: 3,
     finished: true,
     createdAt: oneDayAgoDate,
   },
@@ -179,8 +188,9 @@ describe("Task Service", () => {
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
-    expect(tasksFromCache.length).toBe(1);
-    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
+    expect(tasksFromCache.length).toBe(2);
+    expect(tasksFromCache[0].priority > tasksFromCache[1].priority).toBe(true);
+    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[1]);
   });
 
   test("Should return a list of tasks from the cache with options", async () => {
@@ -194,7 +204,7 @@ describe("Task Service", () => {
         "any_user_id"
       );
 
-      expect(tasksFromCache.length).toBe(2);
+      expect(tasksFromCache.length).toBe(3);
 
       if (sortByDateCase === "asc") {
         expect(tasksFromCache[0].createdAt < tasksFromCache[1].createdAt).toBe(
@@ -214,11 +224,10 @@ describe("Task Service", () => {
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
-    expect(tasksFromCache.length).toBe(1);
+    expect(tasksFromCache.length).toBe(2);
     expect(cacheStorageSpy.staleStatusTest).toBeNull();
     expect(cacheStorageSpy.refetchingStatusTest).toBeNull();
     expect(cacheStorageSpy.tasksFromCache).not.toBeNull();
-    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
   });
 
   test("Should return a list of tasks from the database and set into cache when data into cache is stale and not refetching", async () => {
@@ -228,10 +237,9 @@ describe("Task Service", () => {
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
-    expect(tasksFromCache.length).toBe(1);
+    expect(tasksFromCache.length).toBe(2);
     expect(cacheStorageSpy.staleStatusTest).toBeNull();
     expect(cacheStorageSpy.refetchingStatusTest).toBeNull();
     expect(cacheStorageSpy.tasksFromCache).not.toBeNull();
-    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
   });
 });

@@ -103,6 +103,10 @@ class TaskService {
       tasks = tasksFromCache;
     }
 
+    tasks.sort((a, b) => {
+      return b.priority - a.priority;
+    });
+
     if (!finished) {
       tasks = tasks.filter((task) => !task.finished);
     }
