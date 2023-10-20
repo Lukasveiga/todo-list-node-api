@@ -23,6 +23,7 @@ if (process.env.NODE_ENV === "test") {
     process.env.DB_PASSWORD_TEST,
     {
       dialect: "postgresql",
+      logging: false,
       host: process.env.DB_HOST_TEST,
       port: process.env.DB_PORT_TEST,
     }

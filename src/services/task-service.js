@@ -77,7 +77,7 @@ class TaskService {
 
     let tasks;
 
-    const tasksFromCache = await this.cacheStorage.getDate(
+    const tasksFromCache = await this.cacheStorage.getData(
       `findAll(${userId})`
     );
 
@@ -100,7 +100,7 @@ class TaskService {
       await this.cacheStorage.cleanStaleStatus(`findAll(${userId})`);
       await this.cacheStorage.cleanRefetchingStatus(`findAll(${userId})`);
     } else {
-      tasks = await this.cacheStorage.getDate(`findAll(${userId})`);
+      tasks = await this.cacheStorage.getData(`findAll(${userId})`);
     }
 
     if (!finished) {

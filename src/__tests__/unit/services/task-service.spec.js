@@ -3,6 +3,25 @@
 const TaskService = require("../../../services/task-service");
 const { NotFoundError } = require("../../../utils/exceptions");
 
+const createdAt = new Date();
+
+const listTasksTest = [
+  {
+    title: "valid_title",
+    description: "valid_description",
+    priority: "any_priority",
+    finished: false,
+    createdAt,
+  },
+  {
+    title: "valid_title",
+    description: "valid_description",
+    priority: "any_priority",
+    finished: true,
+    createdAt: createdAt.getDate() + 1,
+  },
+];
+
 const makeTaskRepositorySpy = () => {
   class TaskRepositorySpy {
     async create(body, userId) {
@@ -39,9 +58,24 @@ const makeCacheStorageSpy = () => {
     async setStaleStatus(key, value) {
       this.staleStatusTest = true;
     }
+
+    async getData(key) {
+      return this.tasksFromCache;
+    }
+
+    async isStale(key) {
+      return this.staleStatusTest;
+    }
+
+    async isRefetching(key) {
+      return this.refetchingStatusTest;
+    }
   }
 
   const cacheStorageSpy = new CacheStorageSpy();
+  cacheStorageSpy.staleStatusTest = false;
+  cacheStorageSpy.refetchingStatusTest = false;
+  cacheStorageSpy.tasksFromCache = listTasksTest;
 
   return cacheStorageSpy;
 };
@@ -55,7 +89,7 @@ const makeSut = () => {
 };
 
 describe("Task Service", () => {
-  test("Should return a task body when a new task is created ", async () => {
+  test("Should return a task body when a new task is created", async () => {
     const { sut, cacheStorageSpy, taskRepositorySpy } = makeSut();
 
     const task = {
@@ -115,5 +149,13 @@ describe("Task Service", () => {
     promise.then(() => {
       expect(cacheStorageSpy.staleStatusTest).toBe(true);
     });
+  });
+
+  test("Should return a list of tasks from the cache without options", async () => {
+    const { sut } = makeSut();
+
+    const tasksFromCache = await sut.findAll({}, "any_user_id");
+
+    expect(tasksFromCache[0]).toEqual(tasksFromCache[0]);
   });
 });
