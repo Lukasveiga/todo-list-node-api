@@ -52,4 +52,13 @@ describe("Task Repository", () => {
 
     expect(task).toBeNull();
   });
+
+  test("Should return a list of tasks when try to find all tasks", async () => {
+    const tasks = await taskRepository.findAll(1);
+
+    const { title, description, priority } = tasks[0];
+
+    expect(tasks.length !== 0).toBe(true);
+    expect({ title, description, priority }).toEqual(taskTest);
+  });
 });
