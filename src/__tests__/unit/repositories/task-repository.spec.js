@@ -46,4 +46,10 @@ describe("Task Repository", () => {
 
     expect({ title, description, priority }).toEqual(taskTest);
   });
+
+  test("Should return null when task is not found by id", async () => {
+    const task = await taskRepository.findById(5, 1);
+
+    expect(task).toBeNull();
+  });
 });
