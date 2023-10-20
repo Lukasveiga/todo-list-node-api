@@ -3,7 +3,9 @@
 const TaskService = require("../../../services/task-service");
 const { NotFoundError } = require("../../../utils/exceptions");
 
-const createdAt = new Date();
+const currentDate = new Date();
+const oneDayAgoDate = new Date(currentDate);
+oneDayAgoDate.setDate(currentDate.getDate() - 1);
 
 const listTasksTest = [
   {
@@ -11,14 +13,14 @@ const listTasksTest = [
     description: "valid_description",
     priority: "any_priority",
     finished: false,
-    createdAt,
+    createdAt: currentDate,
   },
   {
     title: "valid_title",
     description: "valid_description",
     priority: "any_priority",
     finished: true,
-    createdAt: createdAt.getDate() + 1,
+    createdAt: oneDayAgoDate,
   },
 ];
 
@@ -152,10 +154,44 @@ describe("Task Service", () => {
   });
 
   test("Should return a list of tasks from the cache without options", async () => {
-    const { sut } = makeSut();
+    const { sut, cacheStorageSpy } = makeSut();
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
-    expect(tasksFromCache[0]).toEqual(tasksFromCache[0]);
+    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
+  });
+
+  test("Should return a list of tasks from the cache without options", async () => {
+    const { sut, cacheStorageSpy } = makeSut();
+
+    const tasksFromCache = await sut.findAll({}, "any_user_id");
+
+    expect(tasksFromCache.length).toBe(1);
+    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
+  });
+
+  test("Should return a list of tasks from the cache with options", async () => {
+    const { sut } = makeSut();
+
+    const sortByDateCases = ["asc", "desc"];
+
+    for (let sortByDateCase of sortByDateCases) {
+      const tasksFromCache = await sut.findAll(
+        { finished: true, sortByDate: sortByDateCase },
+        "any_user_id"
+      );
+
+      expect(tasksFromCache.length).toBe(2);
+
+      if (sortByDateCase === "asc") {
+        expect(tasksFromCache[0].createdAt < tasksFromCache[1].createdAt).toBe(
+          true
+        );
+      } else {
+        expect(tasksFromCache[0].createdAt > tasksFromCache[1].createdAt).toBe(
+          true
+        );
+      }
+    }
   });
 });
