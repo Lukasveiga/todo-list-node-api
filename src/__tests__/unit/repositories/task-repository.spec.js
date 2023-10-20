@@ -61,4 +61,21 @@ describe("Task Repository", () => {
     expect(tasks.length !== 0).toBe(true);
     expect({ title, description, priority }).toEqual(taskTest);
   });
+
+  test("Should return task body when task is updated", async () => {
+    const updateTaskTest = {
+      title: "update_title",
+      description: "update_description",
+      priority: 2,
+    };
+    const updatedTask = await taskRepository.update(
+      updateTaskTest,
+      taskId,
+      userId
+    );
+
+    const { title, description, priority } = updatedTask;
+
+    expect({ title, description, priority }).toEqual(updateTaskTest);
+  });
 });
