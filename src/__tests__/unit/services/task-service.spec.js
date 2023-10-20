@@ -158,14 +158,6 @@ describe("Task Service", () => {
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
-    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
-  });
-
-  test("Should return a list of tasks from the cache without options", async () => {
-    const { sut, cacheStorageSpy } = makeSut();
-
-    const tasksFromCache = await sut.findAll({}, "any_user_id");
-
     expect(tasksFromCache.length).toBe(1);
     expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
   });
