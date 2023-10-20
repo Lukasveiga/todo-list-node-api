@@ -38,6 +38,10 @@ const makeTaskRepositorySpy = () => {
       return this.updateTaskTest;
     }
 
+    async findAll(userId) {
+      return this.tasksFromDatabase;
+    }
+
     async delete(taskId, userId) {}
   }
 
@@ -51,18 +55,27 @@ const makeTaskRepositorySpy = () => {
   taskRepositorySpy.createTaskTest = taskTest;
   taskRepositorySpy.updateTaskTest = taskTest;
   taskRepositorySpy.findByIdTaskTest = taskTest;
+  taskRepositorySpy.tasksFromDatabase = listTasksTest;
 
   return taskRepositorySpy;
 };
 
 const makeCacheStorageSpy = () => {
   class CacheStorageSpy {
-    async setStaleStatus(key, value) {
+    async setStaleStatus(key, value, options = null) {
       this.staleStatusTest = true;
+    }
+
+    async setRefetchingStatus(key, value, options = null) {
+      this.refetchingStatusTest = true;
     }
 
     async getData(key) {
       return this.tasksFromCache;
+    }
+
+    async setData(key, value, options = null) {
+      this.tasksFromCache = listTasksTest;
     }
 
     async isStale(key) {
@@ -71,6 +84,14 @@ const makeCacheStorageSpy = () => {
 
     async isRefetching(key) {
       return this.refetchingStatusTest;
+    }
+
+    async cleanStaleStatus(key) {
+      this.staleStatusTest = null;
+    }
+
+    async cleanRefetchingStatus(key) {
+      this.refetchingStatusTest = null;
     }
   }
 
@@ -185,5 +206,18 @@ describe("Task Service", () => {
         );
       }
     }
+  });
+
+  test("Should return a list of tasks from the database and set into cache without options", async () => {
+    const { sut, cacheStorageSpy } = makeSut();
+    cacheStorageSpy.tasksFromCache = null;
+
+    const tasksFromCache = await sut.findAll({}, "any_user_id");
+
+    expect(tasksFromCache.length).toBe(1);
+    expect(cacheStorageSpy.staleStatusTest).toBeNull();
+    expect(cacheStorageSpy.refetchingStatusTest).toBeNull();
+    expect(cacheStorageSpy.tasksFromCache).not.toBeNull();
+    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
   });
 });

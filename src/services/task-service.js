@@ -100,7 +100,7 @@ class TaskService {
       await this.cacheStorage.cleanStaleStatus(`findAll(${userId})`);
       await this.cacheStorage.cleanRefetchingStatus(`findAll(${userId})`);
     } else {
-      tasks = await this.cacheStorage.getData(`findAll(${userId})`);
+      tasks = tasksFromCache;
     }
 
     if (!finished) {
