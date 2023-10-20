@@ -208,9 +208,23 @@ describe("Task Service", () => {
     }
   });
 
-  test("Should return a list of tasks from the database and set into cache without options", async () => {
+  test("Should return a list of tasks from the database and set into cache when has no data into cache", async () => {
     const { sut, cacheStorageSpy } = makeSut();
     cacheStorageSpy.tasksFromCache = null;
+
+    const tasksFromCache = await sut.findAll({}, "any_user_id");
+
+    expect(tasksFromCache.length).toBe(1);
+    expect(cacheStorageSpy.staleStatusTest).toBeNull();
+    expect(cacheStorageSpy.refetchingStatusTest).toBeNull();
+    expect(cacheStorageSpy.tasksFromCache).not.toBeNull();
+    expect(tasksFromCache[0]).toEqual(cacheStorageSpy.tasksFromCache[0]);
+  });
+
+  test("Should return a list of tasks from the database and set into cache when data into cache is stale and not refetching", async () => {
+    const { sut, cacheStorageSpy } = makeSut();
+    cacheStorageSpy.staleStatusTest = true;
+    cacheStorageSpy.refetchingStatusTest = false;
 
     const tasksFromCache = await sut.findAll({}, "any_user_id");
 
