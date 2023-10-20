@@ -19,6 +19,43 @@ class TaskRepository {
 
     return tasks;
   }
+
+  async findById(taskId, userId) {
+    const task = await taskModel.findOne({
+      where: { id: taskId, id_user: userId },
+    });
+
+    if (!task) {
+      return null;
+    }
+
+    return task.get({ plain: true });
+  }
+
+  async update(body, taskId, userId) {
+    const [updatedRows, [updatedTask]] = await taskModel.update(body, {
+      where: {
+        id: taskId,
+        id_user: userId,
+      },
+      returning: true,
+    });
+
+    if (updatedRows < 1) {
+      return null;
+    }
+
+    return updatedTask.get({ plain: true });
+  }
+
+  async delete(taskId, userId) {
+    await taskModel.destroy({
+      where: {
+        id: taskId,
+        id_user: userId,
+      },
+    });
+  }
 }
 
 module.exports = TaskRepository;
