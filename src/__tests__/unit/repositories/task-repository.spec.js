@@ -38,4 +38,12 @@ describe("Task Repository", () => {
 
     expect({ title, description, priority }).toEqual(taskTest);
   });
+
+  test("Should return task body when task is found by id", async () => {
+    const task = await taskRepository.findById(taskId, userId);
+
+    const { title, description, priority } = task;
+
+    expect({ title, description, priority }).toEqual(taskTest);
+  });
 });
