@@ -37,6 +37,15 @@ class TaskController {
 
     return res.status(204).send();
   }
+
+  async findAll(req, res) {
+    const { id } = req.user;
+    const { finished, sortByDate } = req.query;
+
+    const tasks = await this.taskService.findAll({ finished, sortByDate }, id);
+
+    return res.status(200).json(tasks);
+  }
 }
 
 module.exports = TaskController;
