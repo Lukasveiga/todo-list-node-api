@@ -6,9 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=prod node ./src/server.js",
     "start:dev": "NODE_ENV=dev node --watch ./src/server.js",
-    "test": "docker-compose up -d database-test && jest --colors --noStackTrace --runInBand",
-    "test:unit": "npm test -- --watchAll -c ./jest-unit-config.js && docker-compose down",
-    "test:int": "npm test -- --watchAll -c ./jest-int-config.js && docker-compose down",
+    "test": "jest --colors --runInBand",
+    "test:unit": "docker-compose up -d database-test && npm test -- --watchAll -c ./jest-unit-config.js && docker-compose down",
+    "test:int": "docker-compose up -d database-test redis-compose && npm test -- --watchAll -c ./jest-int-config.js && docker-compose down",
     "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
