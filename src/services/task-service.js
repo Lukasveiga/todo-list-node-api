@@ -14,7 +14,7 @@ class TaskService {
       userId
     );
 
-    await this.cacheStorage.setStaleStatus(`findAll(${userId}):stale`, "true");
+    await this.cacheStorage.setStaleStatus(`findAll(${userId})`, "true");
 
     return newTask;
   }
