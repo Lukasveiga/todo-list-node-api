@@ -20,6 +20,10 @@ const makeTaskServiceSpy = () => {
       return this.serviceTaskTest;
     }
 
+    async findAll(options, userId) {
+      return [].concat(taskTest);
+    }
+
     async delete(taskId, userId) {}
   }
 
@@ -104,5 +108,29 @@ describe("Task Controller", () => {
     expect(res.status.calledWith(204)).to.be.true;
     expect(res.send.calledOnce).to.be.true;
     expect(res.send.calledWith()).to.be.true;
+  });
+
+  test("Should return status code 200 and a list of tasks when is requested all tasks", async () => {
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.spy(),
+    };
+
+    const req = {
+      user: {
+        id: 1,
+      },
+      query: {
+        finished: true,
+        sortByDate: "asc",
+      },
+    };
+
+    const { sut } = makeSut();
+
+    await sut.findAll(req, res);
+
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith([].concat(taskTest))).to.be.true;
   });
 });
