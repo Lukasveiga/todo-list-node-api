@@ -4,7 +4,7 @@ const cors = require("cors");
 require("express-async-errors");
 
 const { requestLog, errorHandler } = require("./middlewares");
-const { userRoute, authRoute } = require("./routes");
+const { userRoute, authRoute, taskRoute } = require("./routes");
 
 const app = express();
 
@@ -15,6 +15,7 @@ app.use(requestLog);
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/login", authRoute);
+app.use("/api/v1/task", taskRoute);
 
 app.use(errorHandler);
 
