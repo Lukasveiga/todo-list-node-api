@@ -10,14 +10,13 @@ const taskTest = {
   priority: "any_priority",
 };
 
-const res = {
-  status: sinon.stub().returnsThis(),
-  json: sinon.spy(),
-};
-
 const makeTaskServiceSpy = () => {
   class TaskServiceSpy {
     async create(body, userId) {
+      return this.serviceTaskTest;
+    }
+
+    async update(body, taskId, userId) {
       return this.serviceTaskTest;
     }
   }
@@ -37,6 +36,11 @@ const makeSut = () => {
 
 describe("Task Controller", () => {
   test("Should return status code 201 and task body when is created a new task", async () => {
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.spy(),
+    };
+
     const req = {
       body: taskTest,
       user: {
@@ -49,6 +53,30 @@ describe("Task Controller", () => {
     await sut.create(req, res);
 
     expect(res.status.calledWith(201)).to.be.true;
+    expect(res.json.calledWith(taskTest)).to.be.true;
+  });
+
+  test("Should return status code 200 and task body when is updated task", async () => {
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.spy(),
+    };
+
+    const req = {
+      body: taskTest,
+      user: {
+        id: 1,
+      },
+      params: {
+        taskId: 1,
+      },
+    };
+
+    const { sut } = makeSut();
+
+    await sut.update(req, res);
+
+    expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith(taskTest)).to.be.true;
   });
 });
