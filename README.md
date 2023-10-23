@@ -1,4 +1,6 @@
-![](image.png)
+<p align="center">
+  <img src="image.png" title="image-header">
+</p>
 
 # **To-Do List API with NodeJs + Express + PostgreSQL**
 
