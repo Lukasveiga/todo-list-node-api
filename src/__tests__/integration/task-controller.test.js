@@ -5,6 +5,7 @@ const request = require("supertest");
 const sequelize = require("../../database/connect");
 
 let token;
+let taskId;
 
 describe("Task Controller", () => {
   beforeAll(async () => {
@@ -138,9 +139,20 @@ describe("Task Controller", () => {
       .send(taskTest);
 
     const { id, title, description, priority } = response.body;
+    taskId = id;
 
     expect(response.status).toBe(201);
     expect(id).not.toBeNull();
     expect({ title, description, priority }).toEqual(taskTest);
+  });
+
+  test("should return status code 400 when is provided invalid url param to update a task", async () => {
+    const invalidUrlParam = "123a";
+    const response = await request(app)
+      .put("/api/v1/task" + `/${invalidUrlParam}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("taskId must to be a number.");
   });
 });
