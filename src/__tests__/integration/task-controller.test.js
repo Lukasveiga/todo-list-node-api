@@ -223,4 +223,14 @@ describe("Task Controller", () => {
       index++;
     }
   });
+
+  test("Should return status code 400 when invalid finished value is provided to update a task", async () => {
+    const response = await request(app)
+      .put("/api/v1/task" + `/${taskId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ finished: "invalid_value" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Finished must be true or false");
+  });
 });

@@ -18,7 +18,6 @@ const priorityMessage = {
 
 const finishedMessage = {
   "boolean.base": "Finished must be true or false",
-  "any.empty": "Finished cannot be empty",
 };
 
 const genericMessage = {
