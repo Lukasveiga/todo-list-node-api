@@ -233,4 +233,32 @@ describe("Task Controller", () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("Finished must be true or false");
   });
+
+  test("should return status code 200 and a list of tasks when is requested all tasks", async () => {
+    const requestCases = [].concat(
+      await request(app)
+        .get("/api/v1/task")
+        .set("Authorization", `Bearer ${token}`),
+      await request(app)
+        .get("/api/v1/task?finished=true")
+        .set("Authorization", `Bearer ${token}`),
+      await request(app)
+        .get("/api/v1/task?sortByDate=asc")
+        .set("Authorization", `Bearer ${token}`),
+      await request(app)
+        .get("/api/v1/task?sortByDate=desc")
+        .set("Authorization", `Bearer ${token}`),
+      await request(app)
+        .get("/api/v1/task?finished=true&sortByDate=asc")
+        .set("Authorization", `Bearer ${token}`),
+      await request(app)
+        .get("/api/v1/task?finished=true&sortByDate=desc")
+        .set("Authorization", `Bearer ${token}`)
+    );
+
+    for (const requestCase of requestCases) {
+      expect(requestCase.status).toBe(200);
+      expect(requestCase.body.length >= 1).toBe(true);
+    }
+  });
 });
