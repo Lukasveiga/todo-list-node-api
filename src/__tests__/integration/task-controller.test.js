@@ -271,4 +271,12 @@ describe("Task Controller", () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("taskId must to be a number.");
   });
+
+  test("Should return status code 204 when task is deleted", async () => {
+    const response = await request(app)
+      .delete(`/api/v1/task` + `/${taskId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(204);
+  });
 });
