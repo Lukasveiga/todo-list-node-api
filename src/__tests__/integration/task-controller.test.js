@@ -105,7 +105,7 @@ describe("Task Controller", () => {
     }
   });
 
-  test("should create new task and return status 201", async () => {
+  test("should return status code 201 and return task body when new task is created", async () => {
     const taskTest = {
       title: "valid_title",
       description: "valid_description",
