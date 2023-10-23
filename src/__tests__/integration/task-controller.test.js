@@ -39,7 +39,7 @@ describe("Task Controller", () => {
     }
   });
 
-  test("Should return status code 400 when empty params are provided to create a new task", async () => {
+  test("Should return status code 400 when required params are not provided to create a new task", async () => {
     const requestCases = [].concat(
       {},
       { priority: 1 },
@@ -55,6 +55,27 @@ describe("Task Controller", () => {
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe("Title and description are required");
+    }
+  });
+
+  test("Should return status code 400 when empty params are provided to create a new task", async () => {
+    const requestCases = [].concat(
+      { title: "valid_title", description: "", priority: 1 },
+      { title: "", description: "valid_description", priority: 1 }
+    );
+
+    const params = ["Description", "Title"];
+    let index = 0;
+
+    for (const requestCase of requestCases) {
+      const response = await request(app)
+        .post("/api/v1/task")
+        .set("Authorization", `Bearer ${token}`)
+        .send(requestCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(`${params[index]} cannot be empty`);
+      index++;
     }
   });
 });
