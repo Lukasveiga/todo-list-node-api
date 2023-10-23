@@ -25,5 +25,17 @@ describe("Task Controller", () => {
     await sequelize.sync({ force: true });
   });
 
-  test("Should create new task and return status 201", async () => {});
+  test("Should return status code 401 when try to access protected routes without access token", async () => {
+    const requestCases = [].concat(
+      await request(app).post("/api/v1/task"),
+      await request(app).get("/api/v1/task"),
+      await request(app).put("/api/v1/task"),
+      await request(app).delete("/api/v1/task")
+    );
+
+    for (const requestCase of requestCases) {
+      expect(requestCase.status).toBe(401);
+      expect(requestCase.body.message).toBe("Unauthorized access");
+    }
+  });
 });
