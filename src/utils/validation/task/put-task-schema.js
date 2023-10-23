@@ -14,7 +14,6 @@ const priorityMessage = {
   "number.base": "Priority must be a number",
   "number.min": "Priority must be between 0 and 5",
   "number.max": "Priority must be between 0 and 5",
-  "any.empty": "Priority cannot be empty",
 };
 
 const finishedMessage = {
