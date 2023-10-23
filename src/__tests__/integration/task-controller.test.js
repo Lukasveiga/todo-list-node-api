@@ -78,4 +78,30 @@ describe("Task Controller", () => {
       index++;
     }
   });
+
+  test("Should return status code 400 when invalid priority values are provided to create a new task", async () => {
+    const requestCases = [].concat(
+      { title: "valid_title", description: "valid_description", priority: "" },
+      { title: "valid_title", description: "valid_description", priority: -1 },
+      { title: "valid_title", description: "valid_description", priority: 6 }
+    );
+
+    const messages = [
+      "Priority must be a number",
+      "Priority must be between 0 and 5",
+      "Priority must be between 0 and 5",
+    ];
+    let index = 0;
+
+    for (const requestCase of requestCases) {
+      const response = await request(app)
+        .post("/api/v1/task")
+        .set("Authorization", `Bearer ${token}`)
+        .send(requestCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(messages[index]);
+      index++;
+    }
+  });
 });
