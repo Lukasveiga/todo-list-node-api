@@ -127,7 +127,7 @@ describe("Task Controller", () => {
     }
   });
 
-  test("should return status code 201 and return task body when new task is created", async () => {
+  test("Should return status code 201 and return task body when new task is created", async () => {
     const taskTest = {
       title: "valid_title",
       description: "valid_description",
@@ -146,7 +146,7 @@ describe("Task Controller", () => {
     expect({ title, description, priority }).toEqual(taskTest);
   });
 
-  test("should return status code 400 when is provided invalid url param to update a task", async () => {
+  test("Should return status code 400 when is provided invalid url param to update a task", async () => {
     const invalidUrlParam = "123a";
     const response = await request(app)
       .put("/api/v1/task" + `/${invalidUrlParam}`)
@@ -260,5 +260,15 @@ describe("Task Controller", () => {
       expect(requestCase.status).toBe(200);
       expect(requestCase.body.length >= 1).toBe(true);
     }
+  });
+
+  test("Should return status code 400 when is provided invalid url param to delete a task", async () => {
+    const invalidUrlParam = "123a";
+    const response = await request(app)
+      .delete("/api/v1/task" + `/${invalidUrlParam}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("taskId must to be a number.");
   });
 });
