@@ -79,6 +79,27 @@ describe("Task Controller", () => {
     }
   });
 
+  test("Should return status code 400 when invalid params are provided to create a new task", async () => {
+    const requestCases = [].concat(
+      { title: "valid_title", description: 1, priority: 1 },
+      { title: 2, description: "valid_description", priority: 1 }
+    );
+
+    const params = ["Description", "Title"];
+    let index = 0;
+
+    for (const requestCase of requestCases) {
+      const response = await request(app)
+        .post("/api/v1/task")
+        .set("Authorization", `Bearer ${token}`)
+        .send(requestCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(`${params[index]} must be a text`);
+      index++;
+    }
+  });
+
   test("Should return status code 400 when invalid priority values are provided to create a new task", async () => {
     const requestCases = [].concat(
       { title: "valid_title", description: "valid_description", priority: "" },

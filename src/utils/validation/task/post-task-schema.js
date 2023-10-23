@@ -2,11 +2,13 @@ const joi = require("joi");
 
 const titleMessage = {
   "any.required": "Title and description are required",
+  "string.base": "Title must be a text",
   "string.empty": "Title cannot be empty",
 };
 
 const descriptionMessage = {
   "any.required": "Title and description are required",
+  "string.base": "Description must be a text",
   "string.empty": "Description cannot be empty",
 };
 
