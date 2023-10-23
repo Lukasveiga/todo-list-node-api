@@ -1,38 +1,38 @@
 const client = require("./redis-client");
 
 class CacheStorage {
-  static async setData(key, value, options = null) {
+  async setData(key, value, options = null) {
     await client.set(key, JSON.stringify(value), options);
   }
 
-  static async getDate(key) {
+  async getDate(key) {
     const data = await client.get(key);
     return JSON.parse(data);
   }
 
-  static async setStaleStatus(key, value, options = null) {
+  async setStaleStatus(key, value, options = null) {
     await client.set(`${key}:stale`, value, options);
   }
 
-  static async isStale(key) {
+  async isStale(key) {
     const result = await client.get(`${key}:stale`);
     return !!result;
   }
 
-  static async setRefetchingStatus(key, value, options = null) {
+  async setRefetchingStatus(key, value, options = null) {
     await client.set(`${key}:refetching`, value, options);
   }
 
-  static async isRefetching(key) {
+  async isRefetching(key) {
     const result = await client.get(`${key}:refetching`);
     return !!result;
   }
 
-  static async cleanStaleStatus(key) {
+  async cleanStaleStatus(key) {
     await client.del(`${key}:stale`);
   }
 
-  static async cleantRefetchingStatus(key) {
+  async cleantRefetchingStatus(key) {
     await client.del(`${key}:refetching`);
   }
 }
