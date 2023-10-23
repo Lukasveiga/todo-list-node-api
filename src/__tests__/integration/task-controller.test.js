@@ -155,4 +155,25 @@ describe("Task Controller", () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("taskId must to be a number.");
   });
+
+  test("Should return status code 400 when empty params are provided to update a task", async () => {
+    const requestCases = [].concat(
+      { title: "valid_title", description: "", priority: 1 },
+      { title: "", description: "valid_description", priority: 1 }
+    );
+
+    const params = ["Description", "Title"];
+    let index = 0;
+
+    for (const requestCase of requestCases) {
+      const response = await request(app)
+        .put("/api/v1/task" + `/${taskId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(requestCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe(`${params[index]} cannot be empty`);
+      index++;
+    }
+  });
 });
