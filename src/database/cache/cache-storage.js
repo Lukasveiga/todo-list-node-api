@@ -5,7 +5,7 @@ class CacheStorage {
     await client.set(key, JSON.stringify(value), options);
   }
 
-  async getDate(key) {
+  async getData(key) {
     const data = await client.get(key);
     return JSON.parse(data);
   }
@@ -32,7 +32,7 @@ class CacheStorage {
     await client.del(`${key}:stale`);
   }
 
-  async cleantRefetchingStatus(key) {
+  async cleanRefetchingStatus(key) {
     await client.del(`${key}:refetching`);
   }
 }
