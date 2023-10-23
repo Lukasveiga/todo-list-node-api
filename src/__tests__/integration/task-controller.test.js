@@ -38,4 +38,23 @@ describe("Task Controller", () => {
       expect(requestCase.body.message).toBe("Unauthorized access");
     }
   });
+
+  test("Should return status code 400 when empty params are provided to create a new task", async () => {
+    const requestCases = [].concat(
+      {},
+      { priority: 1 },
+      { title: "valid_title" },
+      { description: "valid_description" }
+    );
+
+    for (const requestCase of requestCases) {
+      const response = await request(app)
+        .post("/api/v1/task")
+        .set("Authorization", `Bearer ${token}`)
+        .send(requestCase);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Title and description are required");
+    }
+  });
 });
