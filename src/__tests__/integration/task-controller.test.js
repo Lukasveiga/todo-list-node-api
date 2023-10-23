@@ -104,4 +104,22 @@ describe("Task Controller", () => {
       index++;
     }
   });
+
+  test("should create new task and return status 201", async () => {
+    const taskTest = {
+      title: "valid_title",
+      description: "valid_description",
+      priority: 1,
+    };
+    const response = await request(app)
+      .post("/api/v1/task")
+      .set("Authorization", `Bearer ${token}`)
+      .send(taskTest);
+
+    const { id, title, description, priority } = response.body;
+
+    expect(response.status).toBe(201);
+    expect(id).not.toBeNull();
+    expect({ title, description, priority }).toEqual(taskTest);
+  });
 });
