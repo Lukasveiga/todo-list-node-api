@@ -1,10 +1,11 @@
 const { NotFoundError, UnauthorizedError } = require("../utils/exceptions");
 
 class AuthService {
-  constructor(userRepository, encrypter, accessToken) {
+  constructor(userRepository, encrypter, accessToken, cacheStorage) {
     this.userRepository = userRepository;
     this.encrypter = encrypter;
     this.accessToken = accessToken;
+    this.cacheStorage = cacheStorage;
   }
 
   async login(body) {
@@ -31,8 +32,12 @@ class AuthService {
     }
 
     const { id } = user;
-    const options = { expiresIn: "10m" };
+    const options = { expiresIn: "5d" };
     const validAccessToken = this.accessToken.generate({ id }, options);
+
+    const userTasks = await this.userRepository.findAllTasks(id);
+
+    this.cacheStorage.setData(`findAll(${id})`, userTasks, { EX: 900 });
 
     delete user.password;
 
