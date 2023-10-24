@@ -19,6 +19,10 @@ const makeUserRepositorySpy = () => {
     async findByUsername(username) {
       return this.userByUsername;
     }
+
+    async findAllTasks(id) {
+      return this.listOfTasks;
+    }
   }
 
   const userTest = {
@@ -32,6 +36,18 @@ const makeUserRepositorySpy = () => {
   userRepositorySpy.userByUsername = userTest;
 
   return userRepositorySpy;
+};
+
+const makeCacheStorageSpy = () => {
+  class CacheStorageSpy {
+    async setData(key, value, options = null) {
+      return this.tasksFromCache;
+    }
+  }
+
+  const cacheStorageSpy = new CacheStorageSpy();
+
+  return cacheStorageSpy;
 };
 
 const makeEncrypterSpy = () => {
@@ -61,10 +77,16 @@ const makeAccessTokenSpy = () => {
 };
 
 const makeSut = () => {
+  const cacheStorageSpy = makeCacheStorageSpy();
   const userRepositorySpy = makeUserRepositorySpy();
   const encrypterSpy = makeEncrypterSpy();
   const accessTokenSpy = makeAccessTokenSpy();
-  const sut = new AuthService(userRepositorySpy, encrypterSpy, accessTokenSpy);
+  const sut = new AuthService(
+    userRepositorySpy,
+    encrypterSpy,
+    accessTokenSpy,
+    cacheStorageSpy
+  );
 
   return { sut, userRepositorySpy, encrypterSpy, accessTokenSpy };
 };
