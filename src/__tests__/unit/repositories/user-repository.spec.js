@@ -10,6 +10,8 @@ const userTest = {
   password: "valid_password",
 };
 
+let userId;
+
 describe("User Repository", () => {
   afterAll(async () => {
     await sequelize.sync({ force: true });
@@ -17,8 +19,9 @@ describe("User Repository", () => {
 
   test("Should return user body when created a new user", async () => {
     const user = await userRepository.create(userTest);
-    delete user.id;
-    expect(user).toEqual(userTest);
+    const { id, ...userBody } = user;
+    userId = id;
+    expect(userBody).toEqual(userTest);
   });
 
   test("Should return user body when user is found by id", async () => {
@@ -72,6 +75,12 @@ describe("User Repository", () => {
       2
     );
     expect(user).toBeNull();
+  });
+
+  test("Should return a list of tasks when requested all tasks", async () => {
+    const tasks = await userRepository.findAllTasks(userId);
+
+    expect(tasks.length === 0).toBe(true);
   });
 
   test("Should not throw when delete user", async () => {
