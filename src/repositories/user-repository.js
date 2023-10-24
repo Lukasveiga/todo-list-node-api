@@ -1,4 +1,5 @@
 const userModel = require("../database/model/user");
+const taskModel = require("../database/model/task");
 
 class UserRepository {
   async create(body) {
@@ -41,6 +42,16 @@ class UserRepository {
     }
 
     return user.get({ plain: true });
+  }
+
+  async findAllTasks(id) {
+    const user = await userModel.findAll({
+      where: { id },
+      include: taskModel,
+      plain: true,
+    });
+
+    return user.tb_tasks;
   }
 
   async update(body, id) {
