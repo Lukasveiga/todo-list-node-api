@@ -47,4 +47,8 @@ User.hasMany(Task, {
   foreignKey: "id_user",
 });
 
+(async () => {
+  await Task.sync();
+})();
+
 module.exports = Task;

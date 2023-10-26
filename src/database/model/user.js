@@ -27,4 +27,8 @@ const User = database.define(
   { timestamps: false }
 );
 
+(async () => {
+  await User.sync();
+})();
+
 module.exports = User;
