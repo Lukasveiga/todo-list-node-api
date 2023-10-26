@@ -66,6 +66,14 @@ class UserService {
     const updateParams = {};
 
     if (username) {
+      if (username !== user.username) {
+        const existingUsername =
+          await this.userRepository.findByUsername(username);
+
+        if (existingUsername) {
+          throw new BadRequestError("Username already registered.");
+        }
+      }
       updateParams.username = username;
     }
 
