@@ -1,0 +1,359 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "To-Do List API",
+    "description": "First of all, what is a To-Do List? It is a list of all the tasks that you need to complete. In summary, it lists all the things you need to do, ordered by priority. At first glance, this project may appear similar to any other to-do list project, but it's not. This API aims to put into practice a variety of backend development concepts necessary to build a robust backend project.",
+    "contact": {
+      "name": "Support",
+      "email": "lukas.veiga10@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+
+  "paths": {
+    "/api/v1/login": {
+      "post": {
+        "tags": ["login"],
+        "description": "User loggin authentication",
+        "requestBody": {
+          "description": "Requested fields to login in account",
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  { "$ref": "#/components/schemas/RequestLoginUsername" },
+                  { "$ref": "#/components/schemas/RequestLoginEmail" }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseLogin"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username cannot be empty | Email cannot be empty | Password must be provided | You must enter with username or email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user": {
+      "post": {
+        "tags": ["user"],
+        "description": "User registration",
+        "requestBody": {
+          "description": "Requested fields to register a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "All fields are required (username, email and password) | Username cannot be empty | Invalid email | Email cannot be empty | Password cannot be empty | Password must be at least 5 characters long | User already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["user"],
+        "description": "Show logged in user details",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Show logged in user details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUser"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["user"],
+        "description": "Update logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestUser"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUser"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username cannot be empty | Email cannot be empty | Password cannot be empty | Invalid email | Password must be at least 5 characters long | You must enter at least one field (username, email, password) | Email already registered | Username already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "description": "Delete logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User successfully deleted",
+            "headers": {},
+            "content": {
+              "text": {
+                "example": "No content"
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestLoginUsername": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Username provided to login",
+            "example": "test_username"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 5,
+            "description": "User password to login",
+            "example": "test_password"
+          }
+        }
+      },
+      "RequestLoginEmail": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email provided to login",
+            "example": "test_email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 5,
+            "description": "User password to login",
+            "example": "test_password"
+          }
+        }
+      },
+      "ResponseLogin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User id"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email"
+          },
+          "username": {
+            "type": "string",
+            "description": "User username"
+          },
+          "token": {
+            "type": "string",
+            "description": "User access token"
+          }
+        }
+      },
+      "RequestUser": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Username field",
+            "example": "test_username"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email provided to login",
+            "example": "test_email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 5,
+            "description": "User password to login",
+            "example": "test_password"
+          }
+        }
+      },
+      "ResponseUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User id",
+            "example": 1
+          },
+          "username": {
+            "type": "string",
+            "description": "Username field",
+            "example": "test_username"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email provided to login",
+            "example": "test_email@email.com"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Error message"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "description": "JWT authentication",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
