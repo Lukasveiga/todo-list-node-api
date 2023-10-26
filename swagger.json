@@ -238,6 +238,103 @@
           }
         }
       }
+    },
+    "/api/v1/task": {
+      "post": {
+        "tags": ["task"],
+        "description": "Create task for logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestTask"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task sucessfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Title and description are required | Title must be a text | Description must be a text | Title cannot be empty | Description cannot be empty | Priority must be a number | Priority must be between 0 and 5 | Priority cannot be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["task"],
+        "description": "Get all and filtered tasks of logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "finished",
+            "in": "query",
+            "description": "Show tasks that already finished if true is provided",
+            "type": "boolean"
+          },
+          {
+            "name": "sortByDate",
+            "in": "query",
+            "description": "Sort tasks by createdAt field in ascending(asc) or descending(desc) order",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseTask"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -333,6 +430,73 @@
             "type": "string",
             "description": "Email provided to login",
             "example": "test_email@email.com"
+          }
+        }
+      },
+      "RequestTask": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of task",
+            "example": "Do the documentation with sawagger"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of task",
+            "example": "Document the endpoints of the application"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority level of the task",
+            "default": 0,
+            "example": 0
+          },
+          "finished": {
+            "type": "boolean",
+            "description": "Inform if task is already completed",
+            "default": false,
+            "example": false
+          }
+        }
+      },
+      "ResponseTask": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User id",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of task",
+            "example": "Do the documentation with sawagger"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of task",
+            "example": "Document the endpoints of the application"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority level of the task",
+            "example": 1
+          },
+          "createAt": {
+            "type": "date",
+            "description": "Task creation date",
+            "example": "2023-05-12T23:50:21.817Z"
+          },
+          "finished": {
+            "type": "boolean",
+            "description": "Inform if task is already completed",
+            "example": true
+          },
+          "finishedAt": {
+            "type": "date",
+            "description": "task completion date",
+            "example": "2023-05-12T23:50:21.817Z"
           }
         }
       },
