@@ -334,6 +334,112 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": ["task"],
+        "description": "Update task of logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestTask"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Taks successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Title must be a text | Title cannot be empty | Description must be a text | Description cannot be empty | Priority must be a number | Priority must be between 0 and 5 | Finished must be true or false | You must enter at least one field (title, description, priority or finished) | taskId must to be a number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["task"],
+        "description": "Delete task of logged user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "Select task by id to be delete",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Task successfully deleted",
+            "headers": {},
+            "content": {
+              "text": {
+                "example": "No content"
+              }
+            }
+          },
+          "400": {
+            "description": "taskId must to be a number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
