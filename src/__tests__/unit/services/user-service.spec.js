@@ -167,6 +167,15 @@ describe("User Service", () => {
     );
   });
 
+  test("Should throw if username provided is already registered in db when update user", async () => {
+    const { sut } = makeSut();
+
+    const promise = sut.update({ username: "any_username2" }, "any_id");
+    expect(promise).rejects.toThrow(
+      new BadRequestError("Username already registered.")
+    );
+  });
+
   test("Should return updated user dto when update user", async () => {
     const { sut, userRepositorySpy } = makeSut();
     userRepositorySpy.userByEmail = null;
