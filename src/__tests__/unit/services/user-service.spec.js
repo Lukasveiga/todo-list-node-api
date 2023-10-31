@@ -212,7 +212,7 @@ describe("User Service", () => {
     expect(promise).resolves.not.toThrow();
   });
 
-  test("Should throw if invalid dependencies is provided", async () => {
+  test("Should throw if invalid dependencies are provided", async () => {
     const invalid = {};
     const userRepositorySpy = makeUserRepositorySpy();
     const encrypterSpy = makeEncrypterSpy();
