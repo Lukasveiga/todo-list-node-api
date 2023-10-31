@@ -158,4 +158,40 @@ describe("Authentication Service", () => {
 
     expect(result).toEqual({ user, token: accessTokenSpy.validAcessToken });
   });
+
+  test("Should throw if invalid dependencies are provided", async () => {
+    const invalid = {};
+
+    const userTest = {
+      email: "any_email@email.com",
+      password: "any_password",
+    };
+
+    const userRepositorySpy = makeUserRepositorySpy();
+    const encrypterSpy = makeEncrypterSpy();
+    const accessTokenSpy = makeAccessTokenSpy();
+    const cacheStorageSpy = makeCacheStorageSpy();
+
+    const suts = [].concat(
+      new AuthService(invalid, encrypterSpy, accessTokenSpy, cacheStorageSpy),
+      new AuthService(
+        userRepositorySpy,
+        invalid,
+        accessTokenSpy,
+        cacheStorageSpy
+      ),
+      new AuthService(
+        userRepositorySpy,
+        encrypterSpy,
+        invalid,
+        cacheStorageSpy
+      ),
+      new AuthService(userRepositorySpy, encrypterSpy, accessTokenSpy, invalid)
+    );
+
+    for (const sut of suts) {
+      const promise = sut.login(userTest);
+      expect(promise).rejects.toThrow();
+    }
+  });
 });
