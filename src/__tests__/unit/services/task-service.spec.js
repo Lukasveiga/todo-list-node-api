@@ -242,4 +242,54 @@ describe("Task Service", () => {
     expect(cacheStorageSpy.refetchingStatusTest).toBeNull();
     expect(cacheStorageSpy.tasksFromCache).not.toBeNull();
   });
+
+  test("Should throw if invalid cacheStorage dependencie is provided", async () => {
+    const invalid = {};
+
+    const task = {
+      title: "valid_title",
+      description: "valid_description",
+      priority: "any_priority",
+    };
+
+    const taskRepositorySpy = makeTaskRepositorySpy();
+    const sut = new TaskService(taskRepositorySpy, invalid);
+
+    const exceptionCases = [].concat(
+      sut.create(task, "any_user_id"),
+      sut.findAll({}, "any_user_id"),
+      sut.update(task, "any_task_id", "any_user_id"),
+      sut.delete("any_task_id", "any_user_id")
+    );
+
+    for (const exceptionCase of exceptionCases) {
+      expect(exceptionCase).rejects.toThrow();
+    }
+  });
+
+  test("Should throw if invalid taskRepository dependencie is provided", async () => {
+    const invalid = {};
+
+    const task = {
+      title: "valid_title",
+      description: "valid_description",
+      priority: "any_priority",
+    };
+
+    const cacheStorageSpy = makeCacheStorageSpy();
+    cacheStorageSpy.tasksFromCache = null;
+
+    const sut = new TaskService(invalid, cacheStorageSpy);
+
+    const exceptionCases = [].concat(
+      sut.create(task, "any_user_id"),
+      sut.findAll({}, "any_user_id"),
+      sut.update(task, "any_task_id", "any_user_id"),
+      sut.delete("any_task_id", "any_user_id")
+    );
+
+    for (const exceptionCase of exceptionCases) {
+      expect(exceptionCase).rejects.toThrow();
+    }
+  });
 });
