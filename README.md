@@ -117,6 +117,8 @@ npm run test:int
   <img src="./extra/uml-db.svg" width=500 title="uml-diagram-project">
 </p>
 
+- This API revolves around two primary entities: 'user' and 'task.' These entities are interconnected through a one-to-many relationship. In this relationship, a single user can be associated with multiple tasks, while each task is uniquely linked to only one user.
+
 - The management of cached data is governed by flags within the system. When modifications are made to the database, the 'stale' flag is promptly set to true. This signals the method responsible for loading all tasks to initiate a data refresh. Simultaneously, the 'refreshing' flag is also activated, indicating that the data renewal process is underway. As an illustration, consider the scenario where a task is deleted, triggering the setting of the 'stale' flag to true. This systematic approach ensures that the system efficiently handles data updates, maintaining accuracy and responsiveness.
 
 <p align="center">
