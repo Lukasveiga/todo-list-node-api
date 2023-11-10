@@ -71,25 +71,25 @@ LOG_LEVEL=
 
 ### - Scripts:
 
-1. This script will start the project with the production environment
+1. This script will start the project with the production environment:
 
 ```
 npm run start
 ```
 
-2. The following script will start the project with the development environment, starting postgresql and redis containers
+2. The following script will start the project with the development environment, starting postgresql and redis containers:
 
 ```
 npm run start:dev
 ```
 
-3. The next script will run the unit tests, starting postgresql and redis containers with the test databases
+3. The next script will run the unit tests, starting postgresql and redis containers with the test databases:
 
 ```
 npm run test:unit
 ```
 
-4. The last script will run the integration tests, starting postgresql and redis containers with the test databases
+4. The last script will run the integration tests, starting postgresql and redis containers with the test databases:
 
 ```
 npm run test:int
@@ -103,13 +103,13 @@ npm run test:int
 
 <br>
 
-- The project is structured following the layered pattern, that we have first a repository layer as a dependency of the service layer as a dependency of the controller layer. Every class is contructed using abstract classes that all will be coupled in a composition root layer.
+- The project follows a layered pattern, with a hierarchical structure that includes a repository layer as a dependency for the service layer, which in turn serves as a dependency for the controller layer.
 
 <p align="center">
   <img src="./extra/diagram.svg" title="uml-diagram-project">
 </p>
 
-- Every class was build with abstract dependencies to improve the flexibility and scalability of the code. And after all the dependencies are injected using de composition root pattern, that is simillar to the factory pattern.
+- The main classes of the project are crafted using abstract classes, all of which are interconnected in a composition root layer. This thoughtful design ensures a clear and maintainable architecture, promoting modularity and ease of future development.
 
 - Database
 
@@ -117,13 +117,13 @@ npm run test:int
   <img src="./extra/uml-db.svg" width=500 title="uml-diagram-project">
 </p>
 
-- The cached data is controlled by flags, when the database is changed the flag stale is set to true and inform to the method responsible for load all tasks to refecthing the data and the refecthing flag is set to true too, to inform that the data is already been renewed. Like the following example, when some task is deleted and the flag stale is seted to true;
+- The management of cached data is governed by flags within the system. When modifications are made to the database, the 'stale' flag is promptly set to true. This signals the method responsible for loading all tasks to initiate a data refresh. Simultaneously, the 'refreshing' flag is also activated, indicating that the data renewal process is underway. As an illustration, consider the scenario where a task is deleted, triggering the setting of the 'stale' flag to true. This systematic approach ensures that the system efficiently handles data updates, maintaining accuracy and responsiveness.
 
 <p align="center">
   <img src="./extra/is-stale.png" width=500 title="is-stale">
 </p>
 
-- And then in the TaskService findAll method the flag isStale will be checked and if other request already by refecthing the data, if the value of the flag stale was true and any other request is refecthing the data, the list of the taks will be renewed.
+- Within the findAll method of the TaskService, the system checks the isStale flag. It assesses whether another request is currently in the process of refreshing the data. If the stale flag is true and no other request is actively refreshing the data, the list of tasks undergoes a renewal process. This mechanism ensures that the data remains up-to-date and is refreshed only when necessary, optimizing the efficiency of the TaskService functionality.
 
 <p align="center">
   <img src="./extra/is-refecthing.png" width=500 title="is-stale">
@@ -137,9 +137,9 @@ npm run test:int
 
 <br>
 
-- In this API is possible to do de all CRUD operations for user details and tasks too. In addition to presenting an authentication route that generates a token that allows access to other protected routes.
+- This API provides comprehensive CRUD operations for managing both user details and tasks seamlessly. Additionally, it offers an authentication route that generates a token, facilitating access to other protected routes. This robust feature set empowers users to efficiently handle user information and task management while ensuring secure access to protected resources.
 
-- You can access all endpoints and their details in the following route, which was written using the swagger tool and following the open api specification:
+- Explore the details of all available endpoints by navigating to the following route. The documentation, crafted using the Swagger tool and adhering to the OpenAPI specification, offers a comprehensive guide to the API's structure and functionalities. This resource serves as a valuable reference for developers seeking a clear understanding of the API's capabilities and usage.
 
 ```
 http://localhost:PORT/api-docs/
