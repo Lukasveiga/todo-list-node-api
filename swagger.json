@@ -148,10 +148,13 @@
             "bearerAuth": []
           }
         ],
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/RequestUser"
+        "requestBody": {
+          "description": "Requested fields to update a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUser"
+              }
             }
           }
         },
@@ -248,10 +251,13 @@
             "bearerAuth": []
           }
         ],
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/RequestTask"
+        "requestBody": {
+          "description": "Requested fields to create a task",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestPostTask"
+              }
             }
           }
         },
@@ -334,7 +340,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/task/{taskId}": {
       "put": {
         "tags": ["task"],
         "description": "Update task of logged user",
@@ -343,10 +351,23 @@
             "bearerAuth": []
           }
         ],
-        "content": {
-          "application/json": {
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "Select task by id to be updated",
             "schema": {
-              "$ref": "#/components/schemas/RequestTask"
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Requested fields to create a task",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestPutTask"
+              }
             }
           }
         },
@@ -395,8 +416,10 @@
           {
             "name": "taskId",
             "in": "path",
-            "description": "Select task by id to be delete",
-            "type": "integer"
+            "description": "Select task by id to be deleted",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -539,7 +562,28 @@
           }
         }
       },
-      "RequestTask": {
+      "RequestPostTask": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of task",
+            "example": "Do the documentation with sawagger"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of task",
+            "example": "Document the endpoints of the application"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority level of the task",
+            "default": 0,
+            "example": 0
+          }
+        }
+      },
+      "RequestPutTask": {
         "type": "object",
         "properties": {
           "title": {
