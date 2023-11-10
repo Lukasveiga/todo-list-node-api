@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="image.png" title="image-header">
+  <img src="./extra/image.png" title="image-header">
 </p>
 
 # **To-Do List API with NodeJs + Express + PostgreSQL**
@@ -67,7 +67,33 @@ SECRET_KEY=
 LOG_LEVEL=
 ```
 
+- Install all the required packages using the following command `npm install`. And start the project with the following scripts.
+
 ### - Scripts:
+
+1. This script will start the project with the production environment
+
+```
+npm run start
+```
+
+2. The following script will start the project with the development environment, starting postgresql and redis containers
+
+```
+npm run start:dev
+```
+
+3. The next script will run the unit tests, starting postgresql and redis containers with the test databases
+
+```
+npm run test:unit
+```
+
+4. The last script will run the integration tests, starting postgresql and redis containers with the test databases
+
+```
+npm run test:int
+```
 
 </details>
 
@@ -77,4 +103,104 @@ LOG_LEVEL=
 
 <br>
 
+- The project is structured following the layered pattern, that we have first a repository layer as a dependency of the service layer as a dependency of the controller layer. Every class is contructed using abstract classes that all will be coupled in a composition root layer.
+
+<p align="center">
+  <img src="./extra/diagram.svg" title="uml-diagram-project">
+</p>
+
+- Every class was build with abstract dependencies to improve the flexibility and scalability of the code. And after all the dependencies are injected using de composition root pattern, that is simillar to the factory pattern.
+
+- Database
+
+<p align="center">
+  <img src="./extra/uml-db.svg" width=500 title="uml-diagram-project">
+</p>
+
+- The cached data is controlled by flags, when the database is changed the flag stale is set to true and inform to the method responsible for load all tasks to refecthing the data and the refecthing flag is set to true too, to inform that the data is already been renewed. Like the following example, when some task is deleted and the flag stale is seted to true;
+
+<p align="center">
+  <img src="./extra/is-stale.png" width=500 title="is-stale">
+</p>
+
+- And then in the TaskService findAll method the flag isStale will be checked and if other request already by refecthing the data, if the value of the flag stale was true and any other request is refecthing the data, the list of the taks will be renewed.
+
+<p align="center">
+  <img src="./extra/is-refecthing.png" width=500 title="is-stale">
+</p>
+
 </details>
+
+<summary><h2>4. Endpoints</h2></summary>
+<details>
+<summary>Show info</summary>
+
+<br>
+
+- In this API is possible to do de all CRUD operations for user details and tasks too. In addition to presenting an authentication route that generates a token that allows access to other protected routes.
+
+- You can access all endpoints and their details in the following route, which was written using the swagger tool and following the open api specification:
+
+```
+http://localhost:PORT/api-docs/
+```
+
+<p align="center">
+  <img src="./extra/endpoints.png" title="is-stale">
+</p>
+
+</details>
+
+<summary><h2>5. How to contribute?</h2></summary>
+<details>
+<summary>Show info</summary>
+
+<h3>1. Fork this repository</h3>
+
+<h3>2. Clone the repository</h3>
+
+Open a terminal and run the following git command:
+
+```
+git clone "url you just copied"
+```
+
+<h3>3. Create a branch</h3>
+
+```
+git checkout -b your-new-branch-name
+```
+
+<h3>4. Make necessary changes and commit those changes</h3>
+
+Add those changes to the branch you just created using the following command:
+
+```
+git add .
+```
+
+Now commit those changes using following command:
+
+```
+git commit -m "Briefly describe the changes made"
+```
+
+<h3>5. Push changes to GitHub</h3>
+
+Push your changes using the following command:
+
+```
+git push -u origin your-branch-name
+```
+
+<h3>6. Submit your changes for review on GitHub</h3>
+
+<br>
+
+</details>
+
+<h2>Contact Information:</h2>
+
+- Questions and feedbacks are very welcome.
+
+- Email: lukas.veiga10@gmail.com
